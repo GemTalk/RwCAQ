@@ -1,0 +1,116 @@
+Class {
+	#name : 'RwCAQParserTest',
+	#superclass : 'TestCase',
+	#category : 'RwCAQ-Core'
+}
+
+{ #category : 'parsing' }
+RwCAQParserTest >> parse: aString [
+	"Return an AST for the provided string."
+
+	^self parser parse: aString
+]
+
+{ #category : 'accessing' }
+RwCAQParserTest >> parser [
+
+	^RwCAQParser new
+]
+
+{ #category : 'asserting' }
+RwCAQParserTest >> parsing: aString
+equals: anAST [
+
+	| result |
+	result := self parse: aString.
+	self
+		assert: result
+		equals: anAST
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_parse_boolean [
+	"Parse false"
+
+	self
+		parsing: 'true'
+		equals: RwCAQTrue new.
+	self
+		parsing: 'false'
+		equals: RwCAQFalse new
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_parse_equality [
+	"Parse an equality statement"
+
+	| expected |
+	expected := RwCAQEquality
+		left: (RwCAQIdentifier name: 'gemstone.version')
+		right: (RwGemStoneVersionNumber fromString: '42').
+	self
+		parsing: 'gemstone.version = 42'
+		equals: expected.
+	self
+		parsing: 'gemstone.version=42'
+		equals: expected
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_parse_gemstone_version [
+	"GemStone/S version numbers"
+	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
+	These two methods should return the same answer."
+
+	| ast |
+	ast := self parse: '3.7.14'.
+	self
+		assert: ast
+		equals: (RwGemStoneVersionNumber fromString: '3.7.14').
+
+	ast := self parse: '3.7.0'.
+	self
+		assert: ast
+		equals: (RwGemStoneVersionNumber fromString: '3.7').
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_parse_identifier [
+	"Parse solo identifiers"
+
+	|  ast expected |
+	ast := self parse: 't'.
+	expected := RwCAQIdentifier name: 't'.
+	self
+		assert: ast
+		equals: expected.
+	ast := self parse: 't '.
+	expected := RwCAQIdentifier name: 't'.
+	self
+		assert: ast
+		equals: expected.
+
+	ast := self parse: 'tests'.
+	expected := RwCAQIdentifier name: 'tests'.
+	self
+		assert: ast
+		equals: expected.
+
+	ast := self parse: 'tests.smoke1'.
+	expected := RwCAQIdentifier name: 'tests.smoke1'.
+	self
+		assert: ast
+		equals: expected.
+
+	ast := self parse: 'tests1.smoke.regression'.
+	expected := RwCAQIdentifier name: 'tests1.smoke.regression'.
+	self
+		assert: ast
+		equals: expected.
+
+	ast := self parse: 'tests1....smoke.regression'.
+	expected := RwCAQIdentifier name: 'tests1....smoke.regression'.
+	self
+		assert: ast
+		equals: expected.
+]
