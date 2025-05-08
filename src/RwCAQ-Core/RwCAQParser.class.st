@@ -1,22 +1,13 @@
 Class {
 	#name : 'RwCAQParser',
-	#superclass : 'PPCompositeParser',
-	#instVars : [
-		'expression',
-		'boolean',
-		'equality',
-		'identifier',
-		'version',
-		'equalityOperand'
-	],
+	#superclass : 'RwCAQGrammar',
 	#category : 'RwCAQ-Core'
 }
 
 { #category : 'accessing' }
 RwCAQParser >> boolean [
 
-	^('true' asParser ==> [:token | RwCAQTrue new])
-	| ('false' asParser ==> [:token | RwCAQFalse new])
+	^super boolean ==> [:bool | RwCAQPrimitive value: bool]
 ]
 
 { #category : 'accessing' }
@@ -30,15 +21,6 @@ RwCAQParser >> equality [
 RwCAQParser >> equalityOperand [
 
 	^identifier / version / boolean
-]
-
-{ #category : 'accessing' }
-RwCAQParser >> expression [
-
-	^(equality
-	/ boolean
-	/ identifier
-	/ version) memoized
 ]
 
 { #category : 'accessing' }
@@ -60,5 +42,5 @@ RwCAQParser >> version [
 	| digitParser |
 	digitParser := #digit asParser star ==> [:each | each isEmpty ifFalse: [(String withAll: each) asInteger]].
 	^(digitParser , (('.' asParser , digitParser)  ==> [:component | component second]) star)
-		==> [:component | RwGemStoneVersionNumber fromComponents: ({ component first} , component second) ]
+		==> [:component | RwCAQPrimitive value: (RwGemStoneVersionNumber fromComponents: ({ component first} , component second)) ]
 ]

@@ -34,10 +34,16 @@ RwCAQParserTest >> test_parse_boolean [
 
 	self
 		parsing: 'true'
-		equals: RwCAQTrue new.
+		equals: (RwCAQPrimitive value: true).
+	self
+		parsing: 'truex'
+		equals: (RwCAQIdentifier name: 'truex').
 	self
 		parsing: 'false'
-		equals: RwCAQFalse new
+		equals: (RwCAQPrimitive value: false).
+	self
+		parsing: 'falsex'
+		equals: (RwCAQIdentifier name: 'falsex').
 ]
 
 { #category : 'testing-productions' }
@@ -47,7 +53,7 @@ RwCAQParserTest >> test_parse_equality [
 	| expected |
 	expected := RwCAQEquality
 		left: (RwCAQIdentifier name: 'gemstone.version')
-		right: (RwGemStoneVersionNumber fromString: '42').
+		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
@@ -66,12 +72,12 @@ RwCAQParserTest >> test_parse_gemstone_version [
 	ast := self parse: '3.7.14'.
 	self
 		assert: ast
-		equals: (RwGemStoneVersionNumber fromString: '3.7.14').
+		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7.14')).
 
 	ast := self parse: '3.7.0'.
 	self
 		assert: ast
-		equals: (RwGemStoneVersionNumber fromString: '3.7').
+		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7')).
 ]
 
 { #category : 'testing-productions' }
