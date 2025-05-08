@@ -21,6 +21,18 @@ RwCAQGrammar >> boolean [
 ]
 
 { #category : 'accessing' }
+RwCAQGrammar >> equality [
+
+	^equalityOperand, $= asParser trim, equalityOperand
+]
+
+{ #category : 'accessing' }
+RwCAQGrammar >> equalityOperand [
+
+	^identifier / version / boolean
+]
+
+{ #category : 'accessing' }
 RwCAQGrammar >> expression [
 
 	^(equality
@@ -36,7 +48,28 @@ RwCAQGrammar >> falseLiteral [
 ]
 
 { #category : 'accessing' }
+RwCAQGrammar >> identifier [
+
+	^(#letter asParser , (#word asParser | $. asParser) star) flatten trim
+]
+
+{ #category : 'accessing' }
+RwCAQGrammar >> start [
+
+	^expression end
+]
+
+{ #category : 'accessing' }
 RwCAQGrammar >> trueLiteral [
 
 	^('true' asParser , #'word' asParser not) ==> [:token | true]
+]
+
+{ #category : 'accessing' }
+RwCAQGrammar >> version [
+
+	| digitParser |
+	digitParser := #digit asParser star ==> [:each | each isEmpty ifFalse: [(String withAll: each) asInteger]].
+	^(digitParser , (('.' asParser , digitParser)  ==> [:component | component second]) star)
+		==> [:component | RwGemStoneVersionNumber fromComponents: ({ component first} , component second)]
 ]
