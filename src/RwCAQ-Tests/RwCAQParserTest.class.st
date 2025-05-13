@@ -4,7 +4,7 @@ Class {
 	#category : 'RwCAQ-Core'
 }
 
-{ #category : 'parsing' }
+{ #category : 'asserting' }
 RwCAQParserTest >> parse: aString [
 	"Return an AST for the provided string."
 
@@ -19,13 +19,13 @@ RwCAQParserTest >> parser [
 
 { #category : 'asserting' }
 RwCAQParserTest >> parsing: aString
-equals: anAST [
+equals: expected [
 
-	| result |
-	result := self parse: aString.
+	| actual |
+	actual := self parse: aString.
 	self
-		assert: result
-		equals: anAST
+		assert: actual
+		equals: expected
 ]
 
 { #category : 'testing-productions' }
@@ -59,6 +59,12 @@ RwCAQParserTest >> test_parse_equality [
 		equals: expected.
 	self
 		parsing: 'gemstone.version=42'
+		equals: expected.
+	expected := RwCAQEquality
+		left: (RwCAQIdentifier name: 'tests')
+		right: (RwCAQPrimitive value: true).
+	self
+		parsing: 'tests = true'
 		equals: expected
 ]
 
@@ -68,13 +74,14 @@ RwCAQParserTest >> test_parse_gemstone_version [
 	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
 	These two methods should return the same answer."
 
-	| ast |
-	ast := self parse: '3.7.14'.
+	| parser ast |
+	parser := self parser version end.
+	ast := parser parse: '3.7.14'.
 	self
 		assert: ast
 		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7.14')).
 
-	ast := self parse: '3.7.0'.
+	ast := parser parse: '3.7.0'.
 	self
 		assert: ast
 		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7')).

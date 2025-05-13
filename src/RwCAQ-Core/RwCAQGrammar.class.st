@@ -9,67 +9,87 @@ Class {
 		'equality',
 		'identifier',
 		'version',
-		'equalityOperand'
+		'equalityOperand',
+		'equalityOperator',
+		'primitive',
+		'unsignedInteger'
 	],
 	#category : 'RwCAQ-Core'
 }
 
-{ #category : 'accessing' }
+{ #category : 'compound' }
 RwCAQGrammar >> boolean [
 
 	^falseLiteral / trueLiteral
 ]
 
-{ #category : 'accessing' }
+{ #category : 'compound' }
 RwCAQGrammar >> equality [
 
-	^equalityOperand, $= asParser trim, equalityOperand
+	^equalityOperand, equalityOperator, equalityOperand
 ]
 
-{ #category : 'accessing' }
+{ #category : 'compound' }
 RwCAQGrammar >> equalityOperand [
 
-	^identifier / version / boolean
+	^primitive / identifier
 ]
 
-{ #category : 'accessing' }
+{ #category : 'compound' }
+RwCAQGrammar >> equalityOperator [
+
+	^$= asParser trim
+]
+
+{ #category : 'compound' }
 RwCAQGrammar >> expression [
 
 	^(equality
 	/ boolean
-	/ identifier
-	/ version) memoized
+	/ identifier) memoized
 ]
 
-{ #category : 'accessing' }
+{ #category : 'simple' }
 RwCAQGrammar >> falseLiteral [
 
-	^('false' asParser , #'word' asParser not) ==> [:token | false]
+	^(('false' asParser , #'word' asParser not) ==> [:token | false]) trim
 ]
 
-{ #category : 'accessing' }
+{ #category : 'simple' }
 RwCAQGrammar >> identifier [
 
-	^(#letter asParser , (#word asParser | $. asParser) star) flatten trim
+	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim
 ]
 
-{ #category : 'accessing' }
+{ #category : 'compound' }
+RwCAQGrammar >> primitive [
+
+	^version / boolean
+]
+
+{ #category : 'compound' }
 RwCAQGrammar >> start [
 
 	^expression end
 ]
 
-{ #category : 'accessing' }
+{ #category : 'simple' }
 RwCAQGrammar >> trueLiteral [
 
-	^('true' asParser , #'word' asParser not) ==> [:token | true]
+	^(('true' asParser , #'word' asParser not) trim ==> [:token | true]) trim
 ]
 
-{ #category : 'accessing' }
+{ #category : 'simple' }
+RwCAQGrammar >> unsignedInteger [
+
+	^#digit asParser plus flatten ==> [:str | str asInteger]
+]
+
+{ #category : 'simple' }
 RwCAQGrammar >> version [
 
-	| digitParser |
-	digitParser := #digit asParser star ==> [:each | each isEmpty ifFalse: [(String withAll: each) asInteger]].
-	^(digitParser , (('.' asParser , digitParser)  ==> [:component | component second]) star)
-		==> [:component | RwGemStoneVersionNumber fromComponents: ({ component first} , component second)]
+	| start dottedComp |
+	start := unsignedInteger.
+	dottedComp := ($. asParser, unsignedInteger) ==> [:comp | comp second].
+	^(start, dottedComp star) trim ==> [:comps | RwGemStoneVersionNumber fromComponents: ({ comps first} , comps second)]
 ]
