@@ -4,9 +4,7 @@ RwLoadComponent {
 	#componentNames : [ ],
 	#packageNames : [
 		'RwCAQ-Core',
-		'RwCAQ-Core-Old',
 		'RwCAQ-GemStone',
-		'RwCAQ-Old',
 		'RwCAQ-Tests'
 	],
 	#conditionalPackageMapSpecs : {
