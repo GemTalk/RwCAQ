@@ -4,6 +4,7 @@ RwLoadComponent {
 	#componentNames : [ ],
 	#packageNames : [
 		'RwCAQ-Core',
+		'RwCAQ-Evaluation',
 		'RwCAQ-GemStone',
 		'RwCAQ-Tests'
 	],
