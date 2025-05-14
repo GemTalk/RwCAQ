@@ -58,7 +58,7 @@ RwCAQGrammar >> falseLiteral [
 { #category : 'simple' }
 RwCAQGrammar >> identifier [
 
-	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim
+	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim ==> [:name | name asSymbol]
 ]
 
 { #category : 'compound' }
