@@ -29,7 +29,7 @@ equals: expected [
 ]
 
 { #category : 'testing-productions' }
-RwCAQParserTest >> test_parse_boolean [
+RwCAQParserTest >> test_boolean [
 	"Parse false"
 
 	self
@@ -47,25 +47,28 @@ RwCAQParserTest >> test_parse_boolean [
 ]
 
 { #category : 'testing-productions' }
-RwCAQParserTest >> test_parse_equality [
+RwCAQParserTest >> test_equality [
 	"Parse an equality statement"
 
-	| expected left |
+	| expected |
 	expected := RwCAQEquality
 		left: (RwCAQIdentifier name: #'gemstone.version')
 		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
-	self
-		parsing: 'gemstone.version=42'
-		equals: expected.
 	expected := RwCAQEquality
 		left: (RwCAQIdentifier name: #'tests')
 		right: (RwCAQPrimitive value: true).
 	self
 		parsing: 'tests = true'
-		equals: expected.
+		equals: expected
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_equality_is_left_associative [
+
+	| expected left |
 	left := RwCAQEquality
 		left: (RwCAQPrimitive value: true)
 		right: (RwCAQPrimitive value: false).
@@ -78,26 +81,23 @@ RwCAQParserTest >> test_parse_equality [
 ]
 
 { #category : 'testing-productions' }
-RwCAQParserTest >> test_parse_gemstone_version [
-	"GemStone/S version numbers"
-	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
-	These two methods should return the same answer."
+RwCAQParserTest >> test_equality_variable_spacing [
+	"Parse an equality statement"
 
-	| parser ast |
-	parser := self parser version end.
-	ast := parser parse: '3.7.14'.
+	| expected |
+	expected := RwCAQEquality
+		left: (RwCAQIdentifier name: #'gemstone.version')
+		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
 	self
-		assert: ast
-		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7.14')).
-
-	ast := parser parse: '3.7.0'.
+		parsing: 'gemstone.version          =42'
+		equals: expected.
 	self
-		assert: ast
-		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7')).
+		parsing: 'gemstone.version=         42'
+		equals: expected
 ]
 
 { #category : 'testing-productions' }
-RwCAQParserTest >> test_parse_identifier [
+RwCAQParserTest >> test_identifier [
 	"Parse solo identifiers"
 
 	|  ast expected |
@@ -135,4 +135,23 @@ RwCAQParserTest >> test_parse_identifier [
 	self
 		assert: ast
 		equals: expected.
+]
+
+{ #category : 'testing-productions' }
+RwCAQParserTest >> test_version [
+	"GemStone/S version numbers"
+	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
+	These two methods should return the same answer."
+
+	| parser ast |
+	parser := self parser version end.
+	ast := parser parse: '3.7.14'.
+	self
+		assert: ast
+		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7.14')).
+
+	ast := parser parse: '3.7.0'.
+	self
+		assert: ast
+		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7')).
 ]
