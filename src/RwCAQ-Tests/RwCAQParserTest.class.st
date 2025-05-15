@@ -37,13 +37,13 @@ RwCAQParserTest >> test_boolean [
 		equals: (RwCAQPrimitive value: true).
 	self
 		parsing: 'truex'
-		equals: (RwCAQIdentifier name: #'truex').
+		equals: (RwCAQVariable name: #'truex').
 	self
 		parsing: 'false'
 		equals: (RwCAQPrimitive value: false).
 	self
 		parsing: 'falsex'
-		equals: (RwCAQIdentifier name: #'falsex').
+		equals: (RwCAQVariable name: #'falsex').
 ]
 
 { #category : 'testing-productions' }
@@ -52,13 +52,13 @@ RwCAQParserTest >> test_equality [
 
 	| expected |
 	expected := RwCAQEquality
-		left: (RwCAQIdentifier name: #'gemstone.version')
+		left: (RwCAQVariable name: #'gemstone.version')
 		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
 	expected := RwCAQEquality
-		left: (RwCAQIdentifier name: #'tests')
+		left: (RwCAQVariable name: #'tests')
 		right: (RwCAQPrimitive value: true).
 	self
 		parsing: 'tests = true'
@@ -86,7 +86,7 @@ RwCAQParserTest >> test_equality_variable_spacing [
 
 	| expected |
 	expected := RwCAQEquality
-		left: (RwCAQIdentifier name: #'gemstone.version')
+		left: (RwCAQVariable name: #'gemstone.version')
 		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version          =42'
@@ -97,41 +97,41 @@ RwCAQParserTest >> test_equality_variable_spacing [
 ]
 
 { #category : 'testing-productions' }
-RwCAQParserTest >> test_identifier [
+RwCAQParserTest >> test_variable [
 	"Parse solo identifiers"
 
 	|  ast expected |
 	ast := self parse: 't'.
-	expected := RwCAQIdentifier name: #'t'.
+	expected := RwCAQVariable name: #'t'.
 	self
 		assert: ast
 		equals: expected.
 	ast := self parse: 't '.
-	expected := RwCAQIdentifier name: #'t'.
+	expected := RwCAQVariable name: #'t'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests'.
-	expected := RwCAQIdentifier name: #'tests'.
+	expected := RwCAQVariable name: #'tests'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests.smoke1'.
-	expected := RwCAQIdentifier name: #'tests.smoke1'.
+	expected := RwCAQVariable name: #'tests.smoke1'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests1.smoke.regression'.
-	expected := RwCAQIdentifier name: #'tests1.smoke.regression'.
+	expected := RwCAQVariable name: #'tests1.smoke.regression'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests1....smoke.regression'.
-	expected := RwCAQIdentifier name: #'tests1....smoke.regression'.
+	expected := RwCAQVariable name: #'tests1....smoke.regression'.
 	self
 		assert: ast
 		equals: expected.

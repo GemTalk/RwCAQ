@@ -25,10 +25,10 @@ RwCAQParser >> equality [
 ]
 
 { #category : 'accessing' }
-RwCAQParser >> identifier [
+RwCAQParser >> variable [
 
-	^super identifier
-		==> [:id | RwCAQIdentifier name: id]
+	^super variable
+		==> [:id | RwCAQVariable name: id]
 ]
 
 { #category : 'accessing' }

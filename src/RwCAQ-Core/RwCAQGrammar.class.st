@@ -7,12 +7,12 @@ Class {
 		'falseLiteral',
 		'trueLiteral',
 		'equality',
-		'identifier',
 		'version',
 		'equalityOperand',
 		'equalityOperator',
 		'primitive',
-		'unsignedInteger'
+		'unsignedInteger',
+		'variable'
 	],
 	#category : 'RwCAQ-Core'
 }
@@ -40,7 +40,7 @@ RwCAQGrammar >> equality [
 { #category : 'compound' }
 RwCAQGrammar >> equalityOperand [
 
-	^primitive / identifier
+	^primitive / variable
 ]
 
 { #category : 'compound' }
@@ -54,19 +54,13 @@ RwCAQGrammar >> expression [
 
 	^(equality
 	/ boolean
-	/ identifier) memoized
+	/ variable) memoized
 ]
 
 { #category : 'simple' }
 RwCAQGrammar >> falseLiteral [
 
 	^(('false' asParser , #'word' asParser not) ==> [:token | false]) trim
-]
-
-{ #category : 'simple' }
-RwCAQGrammar >> identifier [
-
-	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim ==> [:name | name asSymbol]
 ]
 
 { #category : 'compound' }
@@ -91,6 +85,12 @@ RwCAQGrammar >> trueLiteral [
 RwCAQGrammar >> unsignedInteger [
 
 	^#digit asParser plus flatten ==> [:str | str asInteger]
+]
+
+{ #category : 'simple' }
+RwCAQGrammar >> variable [
+
+	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim ==> [:name | name asSymbol]
 ]
 
 { #category : 'simple' }

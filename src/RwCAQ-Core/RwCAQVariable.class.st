@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwCAQIdentifier',
+	#name : 'RwCAQVariable',
 	#superclass : 'RwCAQAst',
 	#instVars : [
 		'name'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwCAQIdentifier class >> name: aString [
+RwCAQVariable class >> name: aString [
 
 	^self new
 		name: aString;
@@ -16,26 +16,26 @@ RwCAQIdentifier class >> name: aString [
 ]
 
 { #category : 'comparing' }
-RwCAQIdentifier >> = aVariable [
+RwCAQVariable >> = aVariable [
 
 	^self class == aVariable class and: [self name = aVariable name]
 ]
 
 { #category : 'comparing' }
-RwCAQIdentifier >> hash [
+RwCAQVariable >> hash [
 
 	^self name hash
 ]
 
 { #category : 'accessing' }
-RwCAQIdentifier >> name [
+RwCAQVariable >> name [
 	"Variable name to be resolved."
 
 	^name
 ]
 
 { #category : 'accessing' }
-RwCAQIdentifier >> name: aString [
+RwCAQVariable >> name: aString [
 	"Variable name to be resolved."
 
 	name := aString

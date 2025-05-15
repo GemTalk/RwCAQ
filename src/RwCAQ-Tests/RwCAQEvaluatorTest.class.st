@@ -54,11 +54,11 @@ RwCAQEvaluatorTest >> test_boolean [
 RwCAQEvaluatorTest >> test_equality_is_left_associative [
 
 	self
-		evaluating: 'true = false = false'
+		evaluating: '3.7.0 = 3.7.0 = true'
 		equals: true.
 	self
-		evaluating: 'false = false = true'
-		equals: true
+		evaluating: 'true = 3.7.0 = 3.7.0'
+		equals: false
 ]
 
 { #category : 'running' }
