@@ -12,9 +12,16 @@ RwCAQParser >> boolean [
 
 { #category : 'accessing' }
 RwCAQParser >> equality [
+	"If changed, update superclass.
+	I need an AST node to be returned
+	by the parser and haven't figured out
+	how to wrap it."
 
-	^super equality
-		==> [:tokens | RwCAQEquality left: tokens first right: tokens last]
+	| ep |
+	ep := PPExpressionParser new.
+	ep term: equalityOperand.
+	ep group: [:g | g left: equalityOperator do: [:l :op :r | RwCAQEquality left: l right: r]].
+	^ep
 ]
 
 { #category : 'accessing' }

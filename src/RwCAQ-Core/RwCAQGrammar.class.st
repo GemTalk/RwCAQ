@@ -25,8 +25,16 @@ RwCAQGrammar >> boolean [
 
 { #category : 'compound' }
 RwCAQGrammar >> equality [
+	"If changed, update subclasses.
+	I'm not sure how to wrap the do: block
+	to return the correct AST node in the parser
+	other than to reimplement."
 
-	^equalityOperand, equalityOperator, equalityOperand
+	| ep |
+	ep := PPExpressionParser new.
+	ep term: equalityOperand.
+	ep group: [:g | g left: equalityOperator do: [:l :op :r | { l. op. r. }]].
+	^ep
 ]
 
 { #category : 'compound' }
@@ -38,7 +46,7 @@ RwCAQGrammar >> equalityOperand [
 { #category : 'compound' }
 RwCAQGrammar >> equalityOperator [
 
-	^$= asParser trim
+	^$= asParser token trim
 ]
 
 { #category : 'compound' }

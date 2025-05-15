@@ -50,7 +50,7 @@ RwCAQParserTest >> test_parse_boolean [
 RwCAQParserTest >> test_parse_equality [
 	"Parse an equality statement"
 
-	| expected |
+	| expected left |
 	expected := RwCAQEquality
 		left: (RwCAQIdentifier name: #'gemstone.version')
 		right: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '42')).
@@ -65,6 +65,15 @@ RwCAQParserTest >> test_parse_equality [
 		right: (RwCAQPrimitive value: true).
 	self
 		parsing: 'tests = true'
+		equals: expected.
+	left := RwCAQEquality
+		left: (RwCAQPrimitive value: true)
+		right: (RwCAQPrimitive value: false).
+	expected := RwCAQEquality
+		left: left
+		right: (RwCAQPrimitive value: true).
+	self
+		parsing: 'true = false = true'
 		equals: expected
 ]
 

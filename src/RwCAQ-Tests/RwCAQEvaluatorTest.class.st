@@ -68,6 +68,23 @@ RwCAQEvaluatorTest >> test_literal_boolean [
 ]
 
 { #category : 'running' }
+RwCAQEvaluatorTest >> test_nested_equality_with_booleans [
+
+	self
+		evaluating: 'true = true = true'
+		equals: true.
+	self
+		evaluating: 'true = false = true'
+		equals: false.
+	self
+		evaluating: 'false = true = false'
+		equals: true.
+	self
+		evaluating: 'false = false = true'
+		equals: true
+]
+
+{ #category : 'running' }
 RwCAQEvaluatorTest >> test_single_variable [
 
 	self
