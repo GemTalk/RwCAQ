@@ -19,6 +19,15 @@ RwCAQContext >> at: aSymbol [
 	^variables at: aSymbol ifAbsent: [false]
 ]
 
+{ #category : 'accessing' }
+RwCAQContext >> at: aSymbol
+ifUnset: aBlock [
+
+	^variables
+		at: aSymbol
+		ifAbsent: aBlock
+]
+
 { #category : 'initialization' }
 RwCAQContext >> initialize [
 

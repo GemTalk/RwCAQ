@@ -18,9 +18,12 @@ RwCAQEvaluatorTest >> clearContext [
 RwCAQEvaluatorTest >> evaluating: aString
 equals: expected [
 
-	| ast result |
+	| ast evaluator result |
 	ast := self parse: aString.
-	result := ast evaluateIn: context.
+	evaluator := RwCAQEvaluator
+		context: context
+		ast: ast.
+	result := evaluator evaluate.
 	self
 		assert: result
 		equals: expected
@@ -101,6 +104,26 @@ RwCAQEvaluatorTest >> test_compare_and_equality [
 	self
 		evaluating: 'false = gemstone.version < 3.0'
 		equals: true
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_compare_with_unset_variable [
+	"When a variable isn't set, it should result in
+	comparision operations evaluating to false."
+
+	self
+		evaluating: 'gemstone.version > 3.0'
+		equals: true.
+	self
+		evaluating: '3.0 <= gemstone.version'
+		equals: true.
+	self clearContext.
+	self
+		evaluating: 'gemstone.version > 3.0'
+		equals: false.
+	self
+		evaluating: '3.0 <= gemstone.version'
+		equals: false.
 ]
 
 { #category : 'running-simple' }
