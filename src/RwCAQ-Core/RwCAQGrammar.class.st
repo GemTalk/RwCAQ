@@ -12,7 +12,10 @@ Class {
 		'equalityOperator',
 		'primitive',
 		'unsignedInteger',
-		'variable'
+		'variable',
+		'compare',
+		'compareOperand',
+		'compareOperator'
 	],
 	#category : 'RwCAQ-Core'
 }
@@ -21,6 +24,30 @@ Class {
 RwCAQGrammar >> boolean [
 
 	^falseLiteral / trueLiteral
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> compare [
+	"This method is overridden in subclasses.
+	Consider what changes need to be made
+	in subclasses if you change this method."
+
+	^compareOperand, compareOperator, compareOperand
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> compareOperand [
+
+	^version / variable
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> compareOperator [
+
+	^(($> asParser, $= asParser not)
+	/ '>=' asParser
+	/ ($< asParser, $= asParser not)
+	/ '<=' asParser) flatten trim ==> [:token | token asSymbol]
 ]
 
 { #category : 'compound' }
@@ -40,19 +67,20 @@ RwCAQGrammar >> equality [
 { #category : 'compound' }
 RwCAQGrammar >> equalityOperand [
 
-	^primitive / variable
+	^primitive / variable / compare
 ]
 
 { #category : 'compound' }
 RwCAQGrammar >> equalityOperator [
 
-	^$= asParser token trim
+	^$= asParser flatten trim
 ]
 
 { #category : 'compound' }
 RwCAQGrammar >> expression [
 
-	^(equality
+	^(compare
+	/ equality
 	/ boolean
 	/ variable) memoized
 ]

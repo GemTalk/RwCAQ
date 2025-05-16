@@ -11,6 +11,13 @@ RwCAQParser >> boolean [
 ]
 
 { #category : 'accessing' }
+RwCAQParser >> compare [
+
+	^super compare
+		==> [:tokens | RwCAQBinaryCompare left: tokens first op: tokens second right: tokens last]
+]
+
+{ #category : 'accessing' }
 RwCAQParser >> equality [
 	"If changed, update superclass.
 	I need an AST node to be returned

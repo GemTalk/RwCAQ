@@ -51,6 +51,26 @@ RwCAQEvaluatorTest >> test_boolean [
 ]
 
 { #category : 'running' }
+RwCAQEvaluatorTest >> test_compare [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gemstone.version > 3.0'
+		equals: true.
+	self
+		evaluating: 'gemstone.version >= 3.0'
+		equals: true.
+	self
+		evaluating: 'gemstone.version <= 3.0'
+		equals: false.
+	self
+		evaluating: 'gemstone.version < 3.0'
+		equals: false
+]
+
+{ #category : 'running' }
 RwCAQEvaluatorTest >> test_equality_is_left_associative [
 
 	self

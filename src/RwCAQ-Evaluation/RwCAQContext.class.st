@@ -29,7 +29,16 @@ RwCAQContext >> initialize [
 { #category : 'setting' }
 RwCAQContext >> set: aSymbol [
 
+	^self
+		set: aSymbol
+		to: true
+]
+
+{ #category : 'setting' }
+RwCAQContext >> set: aSymbol
+to: aValue [
+
 	^variables
 		at: aSymbol
-		put: true
+		put: aValue
 ]

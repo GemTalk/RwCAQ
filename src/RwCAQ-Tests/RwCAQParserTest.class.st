@@ -47,6 +47,32 @@ RwCAQParserTest >> test_boolean [
 ]
 
 { #category : 'testing-productions' }
+RwCAQParserTest >> test_compare [
+	"Parse an equality statement"
+
+	| expected |
+	expected := RwCAQBinaryCompare
+		left: (RwCAQVariable name: #'gemstone.version')
+		op: #>
+		right: (RwCAQPrimitive value: '42' asRwGemStoneVersionNumber).
+	self
+		parsing: 'gemstone.version > 42'
+		equals: expected.
+	expected op: #>=.
+	self
+		parsing: 'gemstone.version >= 42'
+		equals: expected.
+	expected op: #<=.
+	self
+		parsing: 'gemstone.version <= 42'
+		equals: expected.
+	expected op: #<.
+	self
+		parsing: 'gemstone.version < 42'
+		equals: expected.
+]
+
+{ #category : 'testing-productions' }
 RwCAQParserTest >> test_equality [
 	"Parse an equality statement"
 
