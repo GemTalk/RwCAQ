@@ -87,7 +87,7 @@ RwCAQEvaluatorTest >> test_compare [
 ]
 
 { #category : 'running-composed' }
-RwCAQEvaluatorTest >> test_compare_and_equality_without_parens [
+RwCAQEvaluatorTest >> test_compare_and_equality [
 
 	self
 		evaluating: 'gemstone.version >= 3.0 = true'
@@ -118,6 +118,29 @@ RwCAQEvaluatorTest >> test_equality [
 	self
 		evaluating: 'false = false'
 		equals: true
+]
+
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_equality_and_logic [
+
+	self
+		evaluating: 'test.version = 3.0 | false'
+		equals: false.
+	context
+		set: #'test.version'
+		to: '3.0' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'test.version = 3.0 | false'
+		equals: true.
+	self
+		evaluating: 'false | test.version = 3.0'
+		equals: true.
+	self
+		evaluating: 'false | test.version = 3.1'
+		equals: false.
+	self
+		evaluating: 'test.version = 3.1 | false'
+		equals: false.
 ]
 
 { #category : 'running-simple' }
