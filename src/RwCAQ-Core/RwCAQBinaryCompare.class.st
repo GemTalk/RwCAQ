@@ -38,17 +38,6 @@ RwCAQBinaryCompare >> = aBinaryCompare [
 						and: [right = aBinaryCompare right]]]
 ]
 
-{ #category : 'evaluating' }
-RwCAQBinaryCompare >> evaluateIn: aContext [
-
-	| l r |
-	l := left evaluateIn: aContext.
-	r := right evaluateIn: aContext.
-	^l
-		perform: op
-		with: r
-]
-
 { #category : 'comparing' }
 RwCAQBinaryCompare >> hash [
 
