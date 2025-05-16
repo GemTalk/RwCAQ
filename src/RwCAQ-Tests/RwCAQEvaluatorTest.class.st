@@ -7,6 +7,13 @@ Class {
 	#category : 'RwCAQ-Core'
 }
 
+{ #category : 'context management' }
+RwCAQEvaluatorTest >> clearContext [
+	"Make the context empty"
+
+	context := RwCAQContext new
+]
+
 { #category : 'asserting' }
 RwCAQEvaluatorTest >> evaluating: aString
 equals: expected [
@@ -25,11 +32,23 @@ RwCAQEvaluatorTest >> parse: aString [
 	^RwCAQParser new parse: aString
 ]
 
+{ #category : 'context management' }
+RwCAQEvaluatorTest >> prepareContext [
+	"Load all of the implicit variables into context."
+
+	context
+		set: #'gemstone'.
+	context
+		set: #'gemstone.version'
+		to: ((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)
+]
+
 { #category : 'running' }
 RwCAQEvaluatorTest >> setUp [
 
 	super setUp.
-	context := RwCAQContext new
+	context := RwCAQContext new.
+	self prepareContext
 ]
 
 { #category : 'running' }
@@ -53,9 +72,6 @@ RwCAQEvaluatorTest >> test_boolean [
 { #category : 'running' }
 RwCAQEvaluatorTest >> test_compare [
 
-	context
-		set: #'gemstone.version'
-		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gemstone.version > 3.0'
 		equals: true.
@@ -101,6 +117,7 @@ RwCAQEvaluatorTest >> test_equality_with_booleans [
 { #category : 'running' }
 RwCAQEvaluatorTest >> test_variable [
 
+	self clearContext.
 	self
 		evaluating: 'gemstone'
 		equals: false.
