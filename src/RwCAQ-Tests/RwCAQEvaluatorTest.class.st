@@ -177,6 +177,46 @@ RwCAQEvaluatorTest >> test_equality_is_left_associative [
 		equals: false
 ]
 
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_equality_with_unset_variable [
+	"When a variable isn't set, it should result in
+	comparision operations evaluating to false
+	even if it is being compared to false."
+
+	| left right |
+	left := 'gemstone.version = ', (System gemVersionReport at: 'gsVersion').
+	right := (System gemVersionReport at: 'gsVersion'), ' = gemstone.version'.
+	self
+		evaluating: left
+		equals: true.
+	self
+		evaluating: right
+		equals: true.
+	self clearContext.
+	self
+		evaluating: left
+		equals: false.
+	self
+		evaluating: right
+		equals: false.
+
+	"I believe this is the correct behavior. An unset variable can coerce to false
+	in some situations. It isn't true to say that it is false for the purposes of
+	an equality check."
+	self
+		evaluating: 'gemstone.version = false'
+		equals: false.
+	self
+		evaluating: 'false = gemstone.version'
+		equals: false.
+
+	"Since this variable is unset, it does not have a value. Therefore, it is not
+	equivalent to itself."
+	self
+		evaluating: 'gemstone.version = gemstone.version'
+		equals: false
+]
+
 { #category : 'running-trivial' }
 RwCAQEvaluatorTest >> test_variable [
 
