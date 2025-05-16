@@ -1,7 +1,7 @@
 Extension { #name : 'RwCAQPrimitive' }
 
 { #category : 'evaluating' }
-RwCAQPrimitive >> evaluate [
+RwCAQPrimitive >> evaluateIn: aContext [
 
 	^value
 ]
