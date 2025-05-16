@@ -146,6 +146,20 @@ RwCAQParserTest >> test_equality_variable_spacing [
 		equals: expected
 ]
 
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_logic [
+	"Parse a logic statement"
+
+	| expected |
+	expected := RwCAQBooleanLogic
+		left: (RwCAQVariable name: #'gemstone')
+		op: #|
+		right: (RwCAQPrimitive value: true).
+	self
+		parsing: 'gemstone | true'
+		equals: expected.
+]
+
 { #category : 'testing-trivial' }
 RwCAQParserTest >> test_variable [
 	"Parse solo identifiers"

@@ -11,24 +11,27 @@ RwCAQParser >> boolean [
 ]
 
 { #category : 'accessing' }
-RwCAQParser >> compare [
+RwCAQParser >> compareBlock [
 
-	^super compare
-		==> [:tokens | RwCAQBinaryCompare left: tokens first op: tokens second right: tokens last]
+	^[:l :op :r | RwCAQBinaryCompare
+		left: l
+		op: op asSymbol
+		right: r]
 ]
 
 { #category : 'accessing' }
-RwCAQParser >> equality [
-	"If changed, update superclass.
-	I need an AST node to be returned
-	by the parser and haven't figured out
-	how to wrap it."
+RwCAQParser >> equalsBlock [
 
-	| ep |
-	ep := PPExpressionParser new.
-	ep term: equalityOperand.
-	ep group: [:g | g left: equalityOperator do: [:l :op :r | RwCAQEquality left: l right: r]].
-	^ep
+	^[:l :op :r | RwCAQEquality left: l right: r]
+]
+
+{ #category : 'accessing' }
+RwCAQParser >> logicBlock [
+
+	^[:l :op :r | RwCAQBooleanLogic
+		left: l
+		op: op asSymbol
+		right: r]
 ]
 
 { #category : 'accessing' }

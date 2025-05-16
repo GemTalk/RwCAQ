@@ -6,15 +6,10 @@ Class {
 		'boolean',
 		'falseLiteral',
 		'trueLiteral',
-		'equality',
 		'version',
-		'equalityOperand',
 		'equalityOperator',
-		'primitive',
 		'unsignedInteger',
 		'variable',
-		'compare',
-		'compareOperand',
 		'compareOperator'
 	],
 	#category : 'RwCAQ-Core'
@@ -26,19 +21,10 @@ RwCAQGrammar >> boolean [
 	^falseLiteral / trueLiteral
 ]
 
-{ #category : 'compound' }
-RwCAQGrammar >> compare [
-	"This method is overridden in subclasses.
-	Consider what changes need to be made
-	in subclasses if you change this method."
+{ #category : 'accessing' }
+RwCAQGrammar >> compareBlock [
 
-	^compareOperand, compareOperator, compareOperand
-]
-
-{ #category : 'compound' }
-RwCAQGrammar >> compareOperand [
-
-	^version / variable
+	^[:l :op :r | { l. op. r. }]
 ]
 
 { #category : 'compound' }
@@ -51,36 +37,28 @@ RwCAQGrammar >> compareOperator [
 ]
 
 { #category : 'compound' }
-RwCAQGrammar >> equality [
-	"If changed, update subclasses.
-	I'm not sure how to wrap the do: block
-	to return the correct AST node in the parser
-	other than to reimplement."
-
-	| ep |
-	ep := PPExpressionParser new.
-	ep term: equalityOperand.
-	ep group: [:g | g left: equalityOperator do: [:l :op :r | { l. op. r. }]].
-	^ep
-]
-
-{ #category : 'compound' }
-RwCAQGrammar >> equalityOperand [
-
-	^compare / primitive / variable
-]
-
-{ #category : 'compound' }
 RwCAQGrammar >> equalityOperator [
 
 	^$= asParser flatten trim
 ]
 
+{ #category : 'accessing' }
+RwCAQGrammar >> equalsBlock [
+
+	^[:l :op :r | {l. op. r.}]
+]
+
 { #category : 'compound' }
 RwCAQGrammar >> expression [
 
-	^(equality
-	/ compare
+	| ops |
+	ops := PPExpressionParser new.
+	ops term: boolean / version / variable.
+	ops
+		group: [:g | g left: compareOperator do: self compareBlock];
+		group: [:g | g left: $= asParser flatten trim do: self equalsBlock];
+		group: [:g | g left: $| asParser flatten trim do: self logicBlock].
+	^(ops
 	/ boolean
 	/ variable) memoized
 ]
@@ -91,10 +69,10 @@ RwCAQGrammar >> falseLiteral [
 	^(('false' asParser , #'word' asParser not) ==> [:token | false]) trim
 ]
 
-{ #category : 'compound' }
-RwCAQGrammar >> primitive [
+{ #category : 'accessing' }
+RwCAQGrammar >> logicBlock [
 
-	^version / boolean
+	^[:l :op :r | {l. op. r.}]
 ]
 
 { #category : 'compound' }
