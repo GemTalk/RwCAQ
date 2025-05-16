@@ -67,7 +67,7 @@ RwCAQGrammar >> equality [
 { #category : 'compound' }
 RwCAQGrammar >> equalityOperand [
 
-	^primitive / variable / compare
+	^compare / primitive / variable
 ]
 
 { #category : 'compound' }
@@ -79,8 +79,8 @@ RwCAQGrammar >> equalityOperator [
 { #category : 'compound' }
 RwCAQGrammar >> expression [
 
-	^(compare
-	/ equality
+	^(equality
+	/ compare
 	/ boolean
 	/ variable) memoized
 ]

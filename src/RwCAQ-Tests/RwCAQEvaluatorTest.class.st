@@ -58,7 +58,7 @@ RwCAQEvaluatorTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : 'running' }
+{ #category : 'running-trivial' }
 RwCAQEvaluatorTest >> test_boolean [
 
 	self
@@ -69,7 +69,7 @@ RwCAQEvaluatorTest >> test_boolean [
 		equals: false
 ]
 
-{ #category : 'running' }
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_compare [
 
 	self
@@ -86,19 +86,25 @@ RwCAQEvaluatorTest >> test_compare [
 		equals: false
 ]
 
-{ #category : 'running' }
-RwCAQEvaluatorTest >> test_equality_is_left_associative [
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_compare_and_equality_without_parens [
 
 	self
-		evaluating: '3.7.0 = 3.7.0 = true'
+		evaluating: 'gemstone.version >= 3.0 = true'
 		equals: true.
 	self
-		evaluating: 'true = 3.7.0 = 3.7.0'
-		equals: false
+		evaluating: 'gemstone.version < 3.0 = false'
+		equals: true.
+	self
+		evaluating: 'true = gemstone.version >= 3.0'
+		equals: true.
+	self
+		evaluating: 'false = gemstone.version < 3.0'
+		equals: true
 ]
 
-{ #category : 'running' }
-RwCAQEvaluatorTest >> test_equality_with_booleans [
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_equality [
 
 	self
 		evaluating: 'true = true'
@@ -114,7 +120,18 @@ RwCAQEvaluatorTest >> test_equality_with_booleans [
 		equals: true
 ]
 
-{ #category : 'running' }
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_equality_is_left_associative [
+
+	self
+		evaluating: '3.7.0 = 3.7.0 = true'
+		equals: true.
+	self
+		evaluating: 'true = 3.7.0 = 3.7.0'
+		equals: false
+]
+
+{ #category : 'running-trivial' }
 RwCAQEvaluatorTest >> test_variable [
 
 	self clearContext.

@@ -1,7 +1,10 @@
 Extension { #name : 'RwCAQEquality' }
 
 { #category : 'evaluating' }
-RwCAQEquality >> evaluate [
+RwCAQEquality >> evaluateIn: aContext [
 
-	^left evaluate = right evaluate
+	| l r |
+	l := left evaluateIn: aContext.
+	r := right evaluateIn: aContext.
+	^l = r
 ]

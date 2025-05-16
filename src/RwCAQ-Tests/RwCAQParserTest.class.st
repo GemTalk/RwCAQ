@@ -28,7 +28,7 @@ equals: expected [
 		equals: expected
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-trivial' }
 RwCAQParserTest >> test_boolean [
 	"Parse false"
 
@@ -46,7 +46,7 @@ RwCAQParserTest >> test_boolean [
 		equals: (RwCAQVariable name: #'falsex').
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_compare [
 	"Parse an equality statement"
 
@@ -72,7 +72,31 @@ RwCAQParserTest >> test_compare [
 		equals: expected.
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-composed' }
+RwCAQParserTest >> test_compare_and_equality_without_parens [
+
+	| compare trueNode equality |
+	compare := RwCAQBinaryCompare
+		left: (RwCAQVariable name: #'gemstone.version')
+		op: #'>='
+		right: (RwCAQPrimitive value: '3.0' asRwGemStoneVersionNumber).
+	trueNode := RwCAQPrimitive value: true.
+	equality := RwCAQEquality
+		left: compare
+		right: trueNode.
+	self
+		parsing: 'gemstone.version >= 3.0 = true'
+		equals: equality.
+	
+	equality := RwCAQEquality
+		left: trueNode
+		right: compare.
+	self
+		parsing: 'true = gemstone.version >= 3.0'
+		equals: equality
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_equality [
 	"Parse an equality statement"
 
@@ -91,7 +115,7 @@ RwCAQParserTest >> test_equality [
 		equals: expected
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_equality_is_left_associative [
 
 	| expected left |
@@ -106,7 +130,7 @@ RwCAQParserTest >> test_equality_is_left_associative [
 		equals: expected
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_equality_variable_spacing [
 	"Parse an equality statement"
 
@@ -122,7 +146,7 @@ RwCAQParserTest >> test_equality_variable_spacing [
 		equals: expected
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-trivial' }
 RwCAQParserTest >> test_variable [
 	"Parse solo identifiers"
 
@@ -163,7 +187,7 @@ RwCAQParserTest >> test_variable [
 		equals: expected.
 ]
 
-{ #category : 'testing-productions' }
+{ #category : 'testing-trivial' }
 RwCAQParserTest >> test_version [
 	"GemStone/S version numbers"
 	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
@@ -180,4 +204,9 @@ RwCAQParserTest >> test_version [
 	self
 		assert: ast
 		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3.7')).
+
+	ast := parser parse: '3'.
+	self
+		assert: ast
+		equals: (RwCAQPrimitive value: (RwGemStoneVersionNumber fromString: '3')).
 ]
