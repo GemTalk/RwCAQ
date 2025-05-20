@@ -10,7 +10,8 @@ Class {
 		'version',
 		'unsignedInteger',
 		'variable',
-		'compareOperator'
+		'compareOperator',
+		'logicOperator'
 	],
 	#category : 'RwCAQ-Core'
 }
@@ -51,7 +52,7 @@ RwCAQGrammar >> expression [
 	ops
 		group: [:g | g left: compareOperator do: self compareBlock];
 		group: [:g | g left: $= asParser flatten trim do: self equalsBlock];
-		group: [:g | g left: $| asParser flatten trim do: self logicBlock].
+		group: [:g | g left: logicOperator do: self logicBlock].
 	^ops memoized
 ]
 
@@ -65,6 +66,13 @@ RwCAQGrammar >> falseLiteral [
 RwCAQGrammar >> logicBlock [
 
 	^[:l :op :r | {l. op. r.}]
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> logicOperator [
+
+	^($| asParser
+	/ $& asParser) flatten trim ==> [:token | token asSymbol]
 ]
 
 { #category : 'accessing' }

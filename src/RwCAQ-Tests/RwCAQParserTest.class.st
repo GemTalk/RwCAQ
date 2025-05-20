@@ -234,14 +234,24 @@ RwCAQParserTest >> test_equality_variable_spacing [
 RwCAQParserTest >> test_logic [
 	"Parse a logic statement"
 
-	| expected |
-	expected := RwCAQBooleanLogic
-		left: (RwCAQVariable name: #'gemstone')
+	| gemstone trueNode or and |
+	gemstone := RwCAQVariable name: #'gemstone'.
+	trueNode := RwCAQValue value: true.
+	or := RwCAQBooleanLogic
+		left: gemstone
 		op: #|
-		right: (RwCAQValue value: true).
+		right: trueNode.
 	self
 		parsing: 'gemstone | true'
-		equals: expected.
+		equals: or.
+
+	and := RwCAQBooleanLogic
+		left: gemstone
+		op: #&
+		right: trueNode.
+	self
+		parsing: 'gemstone & true'
+		equals: and.
 ]
 
 { #category : 'testing-trivial' }

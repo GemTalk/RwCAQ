@@ -258,6 +258,23 @@ RwCAQEvaluatorTest >> test_equality_with_unset_variable [
 ]
 
 { #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_logic_and [
+
+	self
+		evaluating: 'true & true'
+		equals: true.
+	self
+		evaluating: 'true & false'
+		equals: false.
+	self
+		evaluating: 'false & true'
+		equals: false.
+	self
+		evaluating: 'false & false'
+		equals: false
+]
+
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_logic_or [
 
 	self
