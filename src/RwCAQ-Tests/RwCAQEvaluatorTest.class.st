@@ -326,6 +326,25 @@ RwCAQEvaluatorTest >> test_logic_or [
 		equals: false
 ]
 
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_logic_with_unset_variable [
+	"When a variable isn't set, it should act as a false
+	in a logic statement."
+
+	self
+		evaluating: 'pharo | false'
+		equals: false.
+	self
+		evaluating: 'pharo | true'
+		equals: true.
+	self
+		evaluating: 'false | pharo'
+		equals: false.
+	self
+		evaluating: 'true | pharo'
+		equals: true.
+]
+
 { #category : 'running-trivial' }
 RwCAQEvaluatorTest >> test_variable [
 

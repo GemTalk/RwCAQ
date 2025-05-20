@@ -33,9 +33,3 @@ RwCAQBinaryCompare >> evaluateIn: aContext [
 		perform: op
 		with: r
 ]
-
-{ #category : 'testing' }
-RwCAQBinaryCompare >> isComparable: anObject [
-
-	^anObject class == RwGemStoneVersionNumber
-]
