@@ -91,12 +91,20 @@ RwCAQEvaluatorTest >> test_boolean [
 RwCAQEvaluatorTest >> test_boolean_as_compare_operand [
 	"Booleans are not comparable using greater than or less than operators."
 
+	| error |
+	error := self
+		evaluating: 'true > gemstone'
+		raises: RwCAQComparableExpected.
 	self
-		evaluating: 'true > 3.7'
-		raises: RwCAQError.
+		assert: error messageText
+		equals: 'Expected comparable operand after evaluating `true` in `true > gemstone`. Operand was `true`.'.
+
+	error := self
+		evaluating: '3.7 > gemstone'
+		raises: RwCAQComparableExpected.
 	self
-		evaluating: '3.7 > true'
-		raises: RwCAQError
+		assert: error messageText
+		equals: 'Expected comparable operand after evaluating `gemstone` in `3.7 > gemstone`. Operand was `true`.'
 ]
 
 { #category : 'running-simple' }
@@ -338,10 +346,18 @@ RwCAQEvaluatorTest >> test_variable [
 RwCAQEvaluatorTest >> test_version_as_logic_operand [
 	"Versions are not comparable logical operands."
 
+	| error |
+	error := self
+		evaluating: 'gemstone.version | 3.6.0'
+		raises: RwCAQBooleanExpected.
 	self
-		evaluating: 'true | 3.7'
-		raises: RwCAQError.
+		assert: error messageText
+		equals: 'Expected boolean operand after evaluating `gemstone.version` in `gemstone.version | 3.6.0`. Operand was `3.7.4`.'.
+
+	error := self
+		evaluating: 'true | 3.6.0'
+		raises: RwCAQBooleanExpected.
 	self
-		evaluating: '3.7 & true'
-		raises: RwCAQError
+		assert: error messageText
+		equals: 'Expected boolean operand after evaluating `3.6.0` in `true | 3.6.0`. Operand was `3.6.0`.'.
 ]

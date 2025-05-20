@@ -40,3 +40,9 @@ RwCAQVariable >> name: aString [
 
 	name := aString
 ]
+
+{ #category : 'printing' }
+RwCAQVariable >> prettyPrintOn: aStream [
+
+	aStream nextPutAll: name
+]

@@ -27,6 +27,12 @@ RwCAQValue >> hash [
 	^value hash
 ]
 
+{ #category : 'printing' }
+RwCAQValue >> prettyPrintOn: aStream [
+
+	value printOn: aStream
+]
+
 { #category : 'accessing' }
 RwCAQValue >> value [
 	"Return the held value"

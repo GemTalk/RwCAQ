@@ -68,6 +68,22 @@ RwCAQBooleanLogic >> op: opSelector [
 	op := opSelector
 ]
 
+{ #category : 'printing' }
+RwCAQBooleanLogic >> prettyPrintOn: aStream [
+
+	left prettyPrintOn: aStream.
+	aStream space.
+	aStream nextPutAll: op.
+	aStream space.
+	right prettyPrintOn: aStream
+]
+
+{ #category : 'printing' }
+RwCAQBooleanLogic >> printOn: aStream [
+
+	self prettyPrintOn: aStream
+]
+
 { #category : 'accessing' }
 RwCAQBooleanLogic >> right [
 

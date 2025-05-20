@@ -1,19 +1,34 @@
 Extension { #name : 'RwCAQBinaryCompare' }
 
 { #category : 'evaluating' }
+RwCAQBinaryCompare >> evaluateAndCheck: ast
+in: aContext
+ifSentinel: aBlock [
+
+	|  result |
+	result := ast evaluateIn: aContext.
+	result class == RwCAQSentinel
+		ifTrue: [^aBlock cull: result].
+	^result class == RwGemStoneVersionNumber
+		ifTrue: [result]
+		ifFalse: [RwCAQComparableExpected
+				signalExpression: self
+				subexpression: ast
+				operand: result]
+]
+
+{ #category : 'evaluating' }
 RwCAQBinaryCompare >> evaluateIn: aContext [
 
 	| l r |
-	l := left evaluateIn: aContext.
-	r := right evaluateIn: aContext.
-	l class == RwCAQSentinel
-		ifTrue: [^false].
-	r class == RwCAQSentinel
-		ifTrue: [^false].
-	(self isComparable: l)
-		ifFalse: [RwCAQError signal].
-	(self isComparable: r)
-		ifFalse: [RwCAQError signal].
+	l := self
+		evaluateAndCheck: left
+		in: aContext
+		ifSentinel: [^false].
+	r := self
+		evaluateAndCheck: right
+		in: aContext
+		ifSentinel: [^false].
 	^l
 		perform: op
 		with: r

@@ -48,6 +48,14 @@ RwCAQEquality >> left: astNode [
 	left := astNode
 ]
 
+{ #category : 'printing' }
+RwCAQEquality >> prettyPrintOn: aStream [
+
+	left prettyPrintOn: aStream.
+	aStream nextPutAll: ' = '.
+	right prettyPrintOn: aStream
+]
+
 { #category : 'accessing' }
 RwCAQEquality >> right [
 	"AST Node representing the value after the equals sign"

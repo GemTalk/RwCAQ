@@ -68,6 +68,17 @@ RwCAQBinaryCompare >> op: opSelector [
 	op := opSelector
 ]
 
+{ #category : 'printing' }
+RwCAQBinaryCompare >> prettyPrintOn: aStream [
+
+	left prettyPrintOn: aStream.
+	aStream
+		space;
+		nextPutAll: op;
+		space.
+	right prettyPrintOn: aStream
+]
+
 { #category : 'accessing' }
 RwCAQBinaryCompare >> right [
 
@@ -78,4 +89,11 @@ RwCAQBinaryCompare >> right [
 RwCAQBinaryCompare >> right: astNode [
 
 	right := astNode
+]
+
+{ #category : 'accessing' }
+RwCAQBinaryCompare >> selector [
+	"Return the appropriate selector to perform."
+
+	^op
 ]
