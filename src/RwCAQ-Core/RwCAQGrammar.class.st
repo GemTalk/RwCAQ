@@ -3,11 +3,11 @@ Class {
 	#superclass : 'PPCompositeParser',
 	#instVars : [
 		'expression',
+		'primitive',
 		'boolean',
 		'falseLiteral',
 		'trueLiteral',
 		'version',
-		'equalityOperator',
 		'unsignedInteger',
 		'variable',
 		'compareOperator'
@@ -36,12 +36,6 @@ RwCAQGrammar >> compareOperator [
 	/ '<=' asParser) flatten trim ==> [:token | token asSymbol]
 ]
 
-{ #category : 'compound' }
-RwCAQGrammar >> equalityOperator [
-
-	^$= asParser flatten trim
-]
-
 { #category : 'accessing' }
 RwCAQGrammar >> equalsBlock [
 
@@ -53,14 +47,12 @@ RwCAQGrammar >> expression [
 
 	| ops |
 	ops := PPExpressionParser new.
-	ops term: boolean / version / variable.
+	ops term: primitive.
 	ops
 		group: [:g | g left: compareOperator do: self compareBlock];
 		group: [:g | g left: $= asParser flatten trim do: self equalsBlock];
 		group: [:g | g left: $| asParser flatten trim do: self logicBlock].
-	^(ops
-	/ boolean
-	/ variable) memoized
+	^ops memoized
 ]
 
 { #category : 'simple' }
@@ -73,6 +65,12 @@ RwCAQGrammar >> falseLiteral [
 RwCAQGrammar >> logicBlock [
 
 	^[:l :op :r | {l. op. r.}]
+]
+
+{ #category : 'accessing' }
+RwCAQGrammar >> primitive [
+
+	^version / boolean / variable
 ]
 
 { #category : 'compound' }
