@@ -29,6 +29,21 @@ equals: expected [
 		equals: expected
 ]
 
+{ #category : 'asserting' }
+RwCAQEvaluatorTest >> evaluating: aString
+raises: anExceptionClass [
+
+	| ast evaluator result raisedException |
+	ast := self parse: aString.
+	evaluator := RwCAQEvaluator
+		context: context
+		ast: ast.
+	[evaluator evaluate]
+		on: anExceptionClass
+		do: [:ex | raisedException := ex. ex return].
+	^raisedException ifNil: [self assert: false]
+]
+
 { #category : 'parsing' }
 RwCAQEvaluatorTest >> parse: aString [
 
@@ -70,6 +85,18 @@ RwCAQEvaluatorTest >> test_boolean [
 	self
 		evaluating: 'false'
 		equals: false
+]
+
+{ #category : 'running-erroneous values' }
+RwCAQEvaluatorTest >> test_boolean_as_compare_operand [
+	"Booleans are not comparable using greater than or less than operators."
+
+	self
+		evaluating: 'true > 3.7'
+		raises: RwCAQError.
+	self
+		evaluating: '3.7 > true'
+		raises: RwCAQError
 ]
 
 { #category : 'running-simple' }
@@ -305,4 +332,16 @@ RwCAQEvaluatorTest >> test_variable [
 	self
 		evaluating: 'pharo'
 		equals: false.
+]
+
+{ #category : 'running-erroneous values' }
+RwCAQEvaluatorTest >> test_version_as_logic_operand [
+	"Versions are not comparable logical operands."
+
+	self
+		evaluating: 'true | 3.7'
+		raises: RwCAQError.
+	self
+		evaluating: '3.7 & true'
+		raises: RwCAQError
 ]
