@@ -7,7 +7,7 @@ Class {
 { #category : 'accessing' }
 RwCAQParser >> boolean [
 
-	^super boolean ==> [:bool | RwCAQPrimitive value: bool]
+	^super boolean ==> [:bool | RwCAQValue value: bool]
 ]
 
 { #category : 'accessing' }
@@ -45,5 +45,5 @@ RwCAQParser >> variable [
 RwCAQParser >> version [
 
 	^super version
-		==> [:aVersion | RwCAQPrimitive value: aVersion]
+		==> [:aVersion | RwCAQValue value: aVersion]
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwCAQPrimitive',
+	#name : 'RwCAQValue',
 	#superclass : 'RwCAQAst',
 	#instVars : [
 		'value'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwCAQPrimitive class >> value: anObject [
+RwCAQValue class >> value: anObject [
 
 	^self new
 		value: anObject;
@@ -16,26 +16,26 @@ RwCAQPrimitive class >> value: anObject [
 ]
 
 { #category : 'comparing' }
-RwCAQPrimitive >> = aValue [
+RwCAQValue >> = aValue [
 
 	^self class == aValue class and: [self value = aValue value]
 ]
 
 { #category : 'comparing' }
-RwCAQPrimitive >> hash [
+RwCAQValue >> hash [
 
 	^value hash
 ]
 
 { #category : 'accessing' }
-RwCAQPrimitive >> value [
+RwCAQValue >> value [
 	"Return the held value"
 
 	^value
 ]
 
 { #category : 'accessing' }
-RwCAQPrimitive >> value: anObject [
+RwCAQValue >> value: anObject [
 	"Set the held value"
 
 	value := anObject
