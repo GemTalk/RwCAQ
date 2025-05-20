@@ -106,6 +106,43 @@ RwCAQEvaluatorTest >> test_compare_and_equality [
 		equals: true
 ]
 
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_compare_and_equality_and_logic [
+	"The test writer considered two possible forms for the parsed expression.
+	
+	Expected form: (x = y) | z
+	Incorrect form: x = (y | z)
+	
+	The comparision is treated as the x value, since it requires version
+	operands. Boolean operands will cause an error.
+	
+	When evaluating x=false, y=false, and z=true, the expected form yields
+	a result of true. The incorrect form yields a result of false.
+	
+	This is why this particular expression was chosen."
+
+	self
+		evaluating: '3.5 < 3.0 = false | true'
+		equals: true
+]
+
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_compare_and_logic [
+
+	self
+		evaluating: 'gemstone.version > 3.0 | true'
+		equals: true.
+	self
+		evaluating: 'gemstone.version > 3.0 | false'
+		equals: true.
+	self
+		evaluating: 'gemstone.version < 3.0 | true'
+		equals: true.
+	self
+		evaluating: 'gemstone.version < 3.0 | false'
+		equals: false.
+]
+
 { #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_compare_with_unset_variable [
 	"When a variable isn't set, it should result in
@@ -149,6 +186,9 @@ RwCAQEvaluatorTest >> test_equality_and_logic [
 	self
 		evaluating: 'test.version = 3.0 | false'
 		equals: false.
+	self
+		evaluating: 'test.version = 3.0 | true'
+		equals: true.
 	context
 		set: #'test.version'
 		to: '3.0' asRwGemStoneVersionNumber.
@@ -214,6 +254,23 @@ RwCAQEvaluatorTest >> test_equality_with_unset_variable [
 	equivalent to itself."
 	self
 		evaluating: 'gemstone.version = gemstone.version'
+		equals: false
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_logic_or [
+
+	self
+		evaluating: 'true | true'
+		equals: true.
+	self
+		evaluating: 'true | false'
+		equals: true.
+	self
+		evaluating: 'false | true'
+		equals: true.
+	self
+		evaluating: 'false | false'
 		equals: false
 ]
 
