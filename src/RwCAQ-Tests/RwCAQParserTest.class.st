@@ -96,6 +96,32 @@ RwCAQParserTest >> test_compare_and_equality [
 		equals: equality
 ]
 
+{ #category : 'testing-composed' }
+RwCAQParserTest >> test_compare_and_logic [
+
+	| compare trueNode logic |
+	compare := RwCAQBinaryCompare
+		left: (RwCAQVariable name: #'gemstone.version')
+		op: #'>='
+		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
+	trueNode := RwCAQValue value: true.
+	logic := RwCAQBooleanLogic
+		left: compare
+		op: #'|'
+		right: trueNode.
+	self
+		parsing: 'gemstone.version >= 3.0 | true'
+		equals: logic.
+	
+	logic := RwCAQBooleanLogic
+		left: trueNode
+		op: #'|'
+		right: compare.
+	self
+		parsing: 'true | gemstone.version >= 3.0'
+		equals: logic
+]
+
 { #category : 'testing-simple' }
 RwCAQParserTest >> test_equality [
 	"Parse an equality statement"
