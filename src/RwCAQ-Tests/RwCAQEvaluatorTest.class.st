@@ -278,6 +278,41 @@ RwCAQEvaluatorTest >> test_equality_is_left_associative [
 		equals: false
 ]
 
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_equality_with_ranges [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.7.x = true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.x = false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.x = false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[4-] = true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[4-] = false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[0-4] = true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[0-4] = false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.4.[0-15] = true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.4.[1-15] = true'
+		equals: false
+]
+
 { #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_equality_with_unset_variable [
 	"When a variable isn't set, it should result in
@@ -352,6 +387,41 @@ RwCAQEvaluatorTest >> test_logic_or [
 		equals: false
 ]
 
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_logic_with_ranges [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.7.x & true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.x & false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.x | false'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[4-] & true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[4-] & false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[0-4] & true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[0-4] & false'
+		equals: false.
+	self
+		evaluating: 'gs3.7.4.[0-15] & true'
+		equals: true.
+	self
+		evaluating: 'gs3.7.4.[1-15] & true'
+		equals: false
+]
+
 { #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_logic_with_unset_variable [
 	"When a variable isn't set, it should act as a false
@@ -395,6 +465,33 @@ RwCAQEvaluatorTest >> test_open_range [
 	self
 		evaluating: 'gs3.7.5.[0-]'
 		equals: false
+]
+
+{ #category : 'running-erroneous values' }
+RwCAQEvaluatorTest >> test_range_as_compare_operand [
+	"Ranges evaluate to boolean values. They are not comparable using greater than or less than operators."
+
+	| error |
+	error := self
+		evaluating: 'gs2.7.x > gemstone.version'
+		raises: RwCAQComparableExpected.
+	self
+		assert: error messageText
+		equals: 'Expected comparable operand after evaluating `gs2.7.x` in `gs2.7.x > gemstone.version`. Operand was `false`.'.
+
+	error := self
+		evaluating: 'gs2.7.[2-] > gemstone.version'
+		raises: RwCAQComparableExpected.
+	self
+		assert: error messageText
+		equals: 'Expected comparable operand after evaluating `gs2.7.[2-]` in `gs2.7.[2-] > gemstone.version`. Operand was `false`.'.
+
+	error := self
+		evaluating: 'gs2.7.[2-4] > gemstone.version'
+		raises: RwCAQComparableExpected.
+	self
+		assert: error messageText
+		equals: 'Expected comparable operand after evaluating `gs2.7.[2-4]` in `gs2.7.[2-4] > gemstone.version`. Operand was `false`.'
 ]
 
 { #category : 'running-simple' }
