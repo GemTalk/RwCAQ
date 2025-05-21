@@ -11,6 +11,13 @@ RwCAQParser >> boolean [
 ]
 
 { #category : 'accessing' }
+RwCAQParser >> closedRange [
+
+	^super closedRange
+		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
+]
+
+{ #category : 'accessing' }
 RwCAQParser >> compareBlock [
 
 	^[:l :op :r | RwCAQBinaryCompare
@@ -32,6 +39,20 @@ RwCAQParser >> logicBlock [
 		left: l
 		op: op asSymbol
 		right: r]
+]
+
+{ #category : 'accessing' }
+RwCAQParser >> openRange [
+
+	^super openRange
+		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
+]
+
+{ #category : 'accessing' }
+RwCAQParser >> subversionRange [
+
+	^super subversionRange
+		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
 ]
 
 { #category : 'accessing' }

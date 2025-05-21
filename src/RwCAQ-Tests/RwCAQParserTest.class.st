@@ -47,6 +47,25 @@ RwCAQParserTest >> test_boolean [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_closed_range [
+
+	| expected |
+	expected := RwCAQRange
+		min: '3.1' asRwGemStoneVersionNumber
+		max: '3.10' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs3.[1-9]'
+		equals: expected.
+
+	expected := RwCAQRange
+		min: '3.5.7' asRwGemStoneVersionNumber
+		max: '3.5.9' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs3.5.[7-8]'
+		equals: expected
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_compare [
 	"Parse an equality statement"
 
@@ -252,6 +271,44 @@ RwCAQParserTest >> test_logic [
 	self
 		parsing: 'gemstone & true'
 		equals: and.
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_open_range [
+
+	| expected |
+	expected := RwCAQRange
+		min: '3.1' asRwGemStoneVersionNumber
+		max: '4' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs3.[1-]'
+		equals: expected.
+
+	expected := RwCAQRange
+		min: '3.5.7' asRwGemStoneVersionNumber
+		max: '3.6' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs3.5.[7-]'
+		equals: expected
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_subversion_range [
+
+	| expected |
+	expected := RwCAQRange
+		min: '3' asRwGemStoneVersionNumber
+		max: '4' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs3.x'
+		equals: expected.
+
+	expected := RwCAQRange
+		min: '2.5' asRwGemStoneVersionNumber
+		max: '2.6' asRwGemStoneVersionNumber.
+	self
+		parsing: 'gs2.5.x'
+		equals: expected
 ]
 
 { #category : 'testing-trivial' }
