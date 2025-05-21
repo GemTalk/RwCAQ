@@ -14,7 +14,7 @@ RwCAQParser >> boolean [
 RwCAQParser >> closedRange [
 
 	^super closedRange
-		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
+		==> [:minMax | RwCAQClosedRange min: minMax first max: minMax last]
 ]
 
 { #category : 'accessing' }
@@ -45,14 +45,14 @@ RwCAQParser >> logicBlock [
 RwCAQParser >> openRange [
 
 	^super openRange
-		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
+		==> [:minMax | RwCAQOpenRange min: minMax first max: minMax last]
 ]
 
 { #category : 'accessing' }
 RwCAQParser >> subversionRange [
 
 	^super subversionRange
-		==> [:minMax | RwCAQRange min: minMax first max: minMax last]
+		==> [:minMax | RwCAQSubversionRange min: minMax first max: minMax last]
 ]
 
 { #category : 'accessing' }

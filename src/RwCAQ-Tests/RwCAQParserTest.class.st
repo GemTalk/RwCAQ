@@ -50,14 +50,14 @@ RwCAQParserTest >> test_boolean [
 RwCAQParserTest >> test_closed_range [
 
 	| expected |
-	expected := RwCAQRange
+	expected := RwCAQClosedRange
 		min: '3.1' asRwGemStoneVersionNumber
 		max: '3.10' asRwGemStoneVersionNumber.
 	self
 		parsing: 'gs3.[1-9]'
 		equals: expected.
 
-	expected := RwCAQRange
+	expected := RwCAQClosedRange
 		min: '3.5.7' asRwGemStoneVersionNumber
 		max: '3.5.9' asRwGemStoneVersionNumber.
 	self
@@ -277,14 +277,14 @@ RwCAQParserTest >> test_logic [
 RwCAQParserTest >> test_open_range [
 
 	| expected |
-	expected := RwCAQRange
+	expected := RwCAQOpenRange
 		min: '3.1' asRwGemStoneVersionNumber
 		max: '4' asRwGemStoneVersionNumber.
 	self
 		parsing: 'gs3.[1-]'
 		equals: expected.
 
-	expected := RwCAQRange
+	expected := RwCAQOpenRange
 		min: '3.5.7' asRwGemStoneVersionNumber
 		max: '3.6' asRwGemStoneVersionNumber.
 	self
@@ -296,14 +296,14 @@ RwCAQParserTest >> test_open_range [
 RwCAQParserTest >> test_subversion_range [
 
 	| expected |
-	expected := RwCAQRange
+	expected := RwCAQSubversionRange
 		min: '3' asRwGemStoneVersionNumber
 		max: '4' asRwGemStoneVersionNumber.
 	self
 		parsing: 'gs3.x'
 		equals: expected.
 
-	expected := RwCAQRange
+	expected := RwCAQSubversionRange
 		min: '2.5' asRwGemStoneVersionNumber
 		max: '2.6' asRwGemStoneVersionNumber.
 	self
