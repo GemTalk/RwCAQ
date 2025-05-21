@@ -44,6 +44,12 @@ raises: anExceptionClass [
 	^raisedException ifNil: [self assert: false]
 ]
 
+{ #category : 'accessing' }
+RwCAQEvaluatorTest >> gsVersionString [
+
+	^System gemVersionReport at: 'gsVersion'
+]
+
 { #category : 'parsing' }
 RwCAQEvaluatorTest >> parse: aString [
 
@@ -495,6 +501,34 @@ RwCAQEvaluatorTest >> test_range_as_compare_operand [
 ]
 
 { #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_ranges_use_gemstone_version_from_context [
+
+	self
+		evaluating: 'gs2.7.x'
+		equals: false.
+	self
+		evaluating: 'gs2.7.[3-]'
+		equals: false.
+	self
+		evaluating: 'gs2.7.[3-4]'
+		equals: false.
+
+	context
+		set: #'gemstone.version'
+		to: '2.7.4' asRwGemStoneVersionNumber.
+
+	self
+		evaluating: 'gs2.7.x'
+		equals: true.
+	self
+		evaluating: 'gs2.7.[3-]'
+		equals: true.
+	self
+		evaluating: 'gs2.7.[3-4]'
+		equals: true.
+]
+
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_subversion_range [
 
 	context
@@ -534,6 +568,28 @@ RwCAQEvaluatorTest >> test_variable [
 	self
 		evaluating: 'pharo'
 		equals: false.
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_variables_use_gemstone_version_from_context [
+
+	self
+		evaluating: 'gemstone.version = ', self gsVersionString
+		equals: true.
+	self
+		evaluating: 'gemstone.version = 2.7.4'
+		equals: false.
+
+	context
+		set: #'gemstone.version'
+		to: '2.7.4' asRwGemStoneVersionNumber.
+
+	self
+		evaluating: 'gemstone.version = ', self gsVersionString
+		equals: false.
+	self
+		evaluating: 'gemstone.version = 2.7.4'
+		equals: true
 ]
 
 { #category : 'running-erroneous values' }
