@@ -108,6 +108,32 @@ RwCAQEvaluatorTest >> test_boolean_as_compare_operand [
 ]
 
 { #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_closed_range [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.[0-7]'
+		equals: true.
+	self
+		evaluating: 'gs4.[0-7]'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[0-4]'
+		equals: true.
+	self
+		evaluating: 'gs3.8.[0-4]'
+		equals: false.
+	self
+		evaluating: 'gs3.7.4.[0-5]'
+		equals: true.
+	self
+		evaluating: 'gs3.7.5.[0-10]'
+		equals: false
+]
+
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_compare [
 
 	self
@@ -343,6 +369,58 @@ RwCAQEvaluatorTest >> test_logic_with_unset_variable [
 	self
 		evaluating: 'true | pharo'
 		equals: true.
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_open_range [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.[0-]'
+		equals: true.
+	self
+		evaluating: 'gs4.[0-]'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[0-]'
+		equals: true.
+	self
+		evaluating: 'gs3.8.[0-]'
+		equals: false.
+	self
+		evaluating: 'gs3.7.4.[0-]'
+		equals: true.
+	self
+		evaluating: 'gs3.7.5.[0-]'
+		equals: false
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_subversion_range [
+
+	context
+		set: #'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.7.x'
+		equals: true.
+	self
+		evaluating: 'gs3.6.x'
+		equals: false.
+	self
+		evaluating: 'gs3.8.x'
+		equals: false.
+	self
+		evaluating: 'gs3.7.4.x'
+		equals: true.
+	self
+		evaluating: 'gs3.x'
+		equals: true.
+	self
+		evaluating: 'gs2.x'
+		equals: false
 ]
 
 { #category : 'running-trivial' }
