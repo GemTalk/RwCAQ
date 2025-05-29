@@ -38,7 +38,7 @@ raises: anExceptionClass [
 	evaluator := RwCAQEvaluator
 		context: context
 		ast: ast.
-	[evaluator evaluate]
+	[result := evaluator evaluate]
 		on: anExceptionClass
 		do: [:ex | raisedException := ex. ex return].
 	^raisedException ifNil: [self assert: false]
@@ -378,6 +378,19 @@ RwCAQEvaluatorTest >> test_equality_with_unset_variable [
 	self
 		evaluating: 'gemstone.version = gemstone.version'
 		equals: false
+]
+
+{ #category : 'running-erroneous values' }
+RwCAQEvaluatorTest >> test_invalid_expression_raises_error [
+	"An invalid expression is an expression that evaluates to a non-boolean value."
+
+	| error |
+	error := self
+		evaluating: '3.7.5'
+		raises: RwCAQInvalidExpression.
+	self
+		assert: error messageText
+		equals: 'Evaluating `3.7.5` evaluated to the non-boolean value `3.7.5`.'
 ]
 
 { #category : 'running-simple' }

@@ -54,5 +54,7 @@ RwCAQEvaluator >> evaluate [
 	result := ast evaluateIn: context.
 	result class == RwCAQSentinel
 		ifTrue: [^false].
-	^result
+	^(result == true) | (result == false)
+		ifTrue: [result]
+		ifFalse: [RwCAQInvalidExpression signalExpression: ast result: result]
 ]
