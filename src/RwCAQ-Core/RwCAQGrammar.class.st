@@ -167,7 +167,7 @@ RwCAQGrammar >> unsignedInteger [
 { #category : 'simple' }
 RwCAQGrammar >> variable [
 
-	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim ==> [:name | name asSymbol]
+	^(#letter asParser , (#word asParser / $. asParser) star) flatten trim
 ]
 
 { #category : 'simple' }

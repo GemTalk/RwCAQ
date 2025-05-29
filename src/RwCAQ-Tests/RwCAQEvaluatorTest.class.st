@@ -61,9 +61,9 @@ RwCAQEvaluatorTest >> prepareContext [
 	"Load all of the implicit variables into context."
 
 	context
-		set: #'gemstone'.
+		set: 'gemstone'.
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: ((System gemVersionReport at: 'gsVersion') asRwGemStoneVersionNumber)
 ]
 
@@ -117,7 +117,7 @@ RwCAQEvaluatorTest >> test_boolean_as_compare_operand [
 RwCAQEvaluatorTest >> test_closed_range [
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gs3.[0-7]'
@@ -257,7 +257,7 @@ RwCAQEvaluatorTest >> test_equality_and_logic [
 		evaluating: 'test.version = 3.0 | true'
 		equals: true.
 	context
-		set: #'test.version'
+		set: 'test.version'
 		to: '3.0' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'test.version = 3.0 | false'
@@ -288,7 +288,7 @@ RwCAQEvaluatorTest >> test_equality_is_left_associative [
 RwCAQEvaluatorTest >> test_equality_with_ranges [
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gs3.7.x = true'
@@ -397,7 +397,7 @@ RwCAQEvaluatorTest >> test_logic_or [
 RwCAQEvaluatorTest >> test_logic_with_ranges [
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gs3.7.x & true'
@@ -451,7 +451,7 @@ RwCAQEvaluatorTest >> test_logic_with_unset_variable [
 RwCAQEvaluatorTest >> test_open_range [
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gs3.[0-]'
@@ -514,7 +514,7 @@ RwCAQEvaluatorTest >> test_ranges_use_gemstone_version_from_context [
 		equals: false.
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '2.7.4' asRwGemStoneVersionNumber.
 
 	self
@@ -532,7 +532,7 @@ RwCAQEvaluatorTest >> test_ranges_use_gemstone_version_from_context [
 RwCAQEvaluatorTest >> test_subversion_range [
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '3.7.4' asRwGemStoneVersionNumber.
 	self
 		evaluating: 'gs3.7.x'
@@ -561,7 +561,7 @@ RwCAQEvaluatorTest >> test_variable [
 	self
 		evaluating: 'gemstone'
 		equals: false.
-	context set: #'gemstone'.
+	context set: 'gemstone'.
 	self
 		evaluating: 'gemstone'
 		equals: true.
@@ -581,7 +581,7 @@ RwCAQEvaluatorTest >> test_variables_use_gemstone_version_from_context [
 		equals: false.
 
 	context
-		set: #'gemstone.version'
+		set: 'gemstone.version'
 		to: '2.7.4' asRwGemStoneVersionNumber.
 
 	self

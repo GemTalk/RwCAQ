@@ -8,6 +8,6 @@ RwCAQRange >> evaluateIn: aContext [
 	This will happen in tests. It could also happen when analyzing a project for a different GemStone version."
 
 	| version |
-	version := aContext at: #'gemstone.version'.
+	version := aContext at: 'gemstone.version'.
 	^version >= min and: [version < max]
 ]

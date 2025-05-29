@@ -28,7 +28,7 @@ equals: expected [
 		equals: expected
 ]
 
-{ #category : 'testing-trivial' }
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_boolean [
 	"Parse false"
 
@@ -37,13 +37,13 @@ RwCAQParserTest >> test_boolean [
 		equals: (RwCAQValue value: true).
 	self
 		parsing: 'truex'
-		equals: (RwCAQVariable name: #'truex').
+		equals: (RwCAQVariable name: 'truex').
 	self
 		parsing: 'false'
 		equals: (RwCAQValue value: false).
 	self
 		parsing: 'falsex'
-		equals: (RwCAQVariable name: #'falsex').
+		equals: (RwCAQVariable name: 'falsex').
 ]
 
 { #category : 'testing-simple' }
@@ -71,7 +71,7 @@ RwCAQParserTest >> test_compare [
 
 	| expected |
 	expected := RwCAQBinaryCompare
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		op: #>
 		right: (RwCAQValue value: '42' asRwGemStoneVersionNumber).
 	self
@@ -96,7 +96,7 @@ RwCAQParserTest >> test_compare_and_equality [
 
 	| compare trueNode equality |
 	compare := RwCAQBinaryCompare
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		op: #'>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
@@ -120,14 +120,14 @@ RwCAQParserTest >> test_compare_and_equality_and_logic [
 
 	| compare trueNode equality tests logic |
 	compare := RwCAQBinaryCompare
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		op: #'>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	equality := RwCAQEquality
 		left: compare
 		right: trueNode.
-	tests := RwCAQVariable name: #'tests'.
+	tests := RwCAQVariable name: 'tests'.
 	logic := RwCAQBooleanLogic
 		left: equality
 		op: #'|'
@@ -153,7 +153,7 @@ RwCAQParserTest >> test_compare_and_logic [
 
 	| compare trueNode logic |
 	compare := RwCAQBinaryCompare
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		op: #'>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
@@ -180,13 +180,13 @@ RwCAQParserTest >> test_equality [
 
 	| expected |
 	expected := RwCAQEquality
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
 	expected := RwCAQEquality
-		left: (RwCAQVariable name: #'tests')
+		left: (RwCAQVariable name: 'tests')
 		right: (RwCAQValue value: true).
 	self
 		parsing: 'tests = true'
@@ -198,7 +198,7 @@ RwCAQParserTest >> test_equality_and_logic [
 
 	| equality trueNode logic |
 	equality := RwCAQEquality
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	logic := RwCAQBooleanLogic
@@ -239,7 +239,7 @@ RwCAQParserTest >> test_equality_variable_spacing [
 
 	| expected |
 	expected := RwCAQEquality
-		left: (RwCAQVariable name: #'gemstone.version')
+		left: (RwCAQVariable name: 'gemstone.version')
 		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version          =42'
@@ -254,7 +254,7 @@ RwCAQParserTest >> test_logic [
 	"Parse a logic statement"
 
 	| gemstone trueNode or and |
-	gemstone := RwCAQVariable name: #'gemstone'.
+	gemstone := RwCAQVariable name: 'gemstone'.
 	trueNode := RwCAQValue value: true.
 	or := RwCAQBooleanLogic
 		left: gemstone
@@ -317,36 +317,36 @@ RwCAQParserTest >> test_variable [
 
 	|  ast expected |
 	ast := self parse: 't'.
-	expected := RwCAQVariable name: #'t'.
+	expected := RwCAQVariable name: 't'.
 	self
 		assert: ast
 		equals: expected.
 	ast := self parse: 't '.
-	expected := RwCAQVariable name: #'t'.
+	expected := RwCAQVariable name: 't'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests'.
-	expected := RwCAQVariable name: #'tests'.
+	expected := RwCAQVariable name: 'tests'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests.smoke1'.
-	expected := RwCAQVariable name: #'tests.smoke1'.
+	expected := RwCAQVariable name: 'tests.smoke1'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests1.smoke.regression'.
-	expected := RwCAQVariable name: #'tests1.smoke.regression'.
+	expected := RwCAQVariable name: 'tests1.smoke.regression'.
 	self
 		assert: ast
 		equals: expected.
 
 	ast := self parse: 'tests1....smoke.regression'.
-	expected := RwCAQVariable name: #'tests1....smoke.regression'.
+	expected := RwCAQVariable name: 'tests1....smoke.regression'.
 	self
 		assert: ast
 		equals: expected.
