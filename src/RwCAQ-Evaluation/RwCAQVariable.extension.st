@@ -4,6 +4,6 @@ Extension { #name : 'RwCAQVariable' }
 RwCAQVariable >> evaluateIn: aContext [
 
 	^aContext
-		at: name
+		resolve: name
 		ifUnset: [RwCAQSentinel name: name]
 ]

@@ -8,6 +8,8 @@ RwCAQRange >> evaluateIn: aContext [
 	This will happen in tests. It could also happen when analyzing a project for a different GemStone version."
 
 	| version |
-	version := aContext at: 'gemstone.version'.
+	version := aContext
+		resolve: 'gemstone.version'
+		ifUnset: [false]. "This should raise an exception. It is false to inline old broken behavior temporarily."
 	^version >= min and: [version < max]
 ]

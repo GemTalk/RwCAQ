@@ -22,28 +22,20 @@ RwCAQContext class >> new [
 	^super new initialize
 ]
 
-{ #category : 'accessing' }
-RwCAQContext >> at: aString [
-
-	^self
-		at: aString
-		ifUnset: [false]
-]
-
-{ #category : 'accessing' }
-RwCAQContext >> at: aString
-ifUnset: aBlock [
-
-	^variables
-		at: aString
-		ifAbsent: aBlock
-]
-
 { #category : 'initialization' }
 RwCAQContext >> initialize [
 
 	super initialize.
 	variables := Dictionary new
+]
+
+{ #category : 'accessing' }
+RwCAQContext >> resolve: aString
+ifUnset: aBlock [
+
+	^variables
+		at: aString
+		ifAbsent: aBlock
 ]
 
 { #category : 'setting' }
