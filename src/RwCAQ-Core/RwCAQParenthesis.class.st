@@ -22,6 +22,12 @@ RwCAQParenthesis >> = aNode [
 		and: [expression = aNode expression]
 ]
 
+{ #category : 'evaluating' }
+RwCAQParenthesis >> evaluateIn: aContext [
+
+	^expression evaluateIn: aContext
+]
+
 { #category : 'accessing' }
 RwCAQParenthesis >> expression [
 	"The wrapped expression"
@@ -47,5 +53,5 @@ RwCAQParenthesis >> prettyPrintOn: aStream [
 
 	aStream nextPut: $(.
 	expression prettyPrintOn: aStream.
-	aStream nextPutAll: $)
+	aStream nextPut: $)
 ]

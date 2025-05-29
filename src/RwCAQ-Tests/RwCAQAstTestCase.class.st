@@ -29,7 +29,7 @@ RwCAQAstTestCase >> test_pretty_print_compare [
 
 	self
 		prettyPrinting: '42>gemstone.version'
-		equals: '42 = gemstone.version'.
+		equals: '42 > gemstone.version'.
 	self
 		prettyPrinting: '42                      >=       gemstone.version'
 		equals: '42 >= gemstone.version'
@@ -63,6 +63,17 @@ RwCAQAstTestCase >> test_pretty_print_open_range [
 	self
 		prettyPrinting: ' gs3.[5-]       '
 		equals: 'gs3.[5-]'
+]
+
+{ #category : 'running_pretty_printing' }
+RwCAQAstTestCase >> test_pretty_print_parens [
+
+	self
+		prettyPrinting: '(( 42) = ((gemstone.version)      ) )'
+		equals: '((42) = ((gemstone.version)))'.
+	self
+		prettyPrinting: '((((42)))                      >=       gemstone.version     )'
+		equals: '((((42))) >= gemstone.version)'
 ]
 
 { #category : 'running_pretty_printing' }

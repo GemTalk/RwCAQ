@@ -89,7 +89,13 @@ RwCAQEvaluatorTest >> test_boolean [
 		evaluating: 'true'
 		equals: true.
 	self
+		evaluating: '(true)'
+		equals: true.
+	self
 		evaluating: 'false'
+		equals: false.
+	self
+		evaluating: '(false)'
 		equals: false
 ]
 
@@ -191,16 +197,16 @@ RwCAQEvaluatorTest >> test_compare_and_equality [
 { #category : 'running-composed' }
 RwCAQEvaluatorTest >> test_compare_and_equality_and_logic [
 	"The test writer considered two possible forms for the parsed expression.
-	
+
 	Expected form: (x = y) | z
 	Incorrect form: x = (y | z)
-	
+
 	The comparision is treated as the x value, since it requires version
 	operands. Boolean operands will cause an error.
-	
+
 	When evaluating x=false, y=false, and z=true, the expected form yields
 	a result of true. The incorrect form yields a result of false.
-	
+
 	This is why this particular expression was chosen."
 
 	self
@@ -381,13 +387,25 @@ RwCAQEvaluatorTest >> test_logic_and [
 		evaluating: 'true & true'
 		equals: true.
 	self
+		evaluating: '((true) & (true))'
+		equals: true.
+	self
 		evaluating: 'true & false'
+		equals: false.
+	self
+		evaluating: '((true) & (false))'
 		equals: false.
 	self
 		evaluating: 'false & true'
 		equals: false.
 	self
+		evaluating: '((false) & (true))'
+		equals: false.
+	self
 		evaluating: 'false & false'
+		equals: false.
+	self
+		evaluating: '((false) & (false))'
 		equals: false
 ]
 
@@ -398,13 +416,25 @@ RwCAQEvaluatorTest >> test_logic_or [
 		evaluating: 'true | true'
 		equals: true.
 	self
+		evaluating: '((true) | (true))'
+		equals: true.
+	self
 		evaluating: 'true | false'
+		equals: true.
+	self
+		evaluating: '((true) | (false))'
 		equals: true.
 	self
 		evaluating: 'false | true'
 		equals: true.
 	self
+		evaluating: '((false) | (true))'
+		equals: true.
+	self
 		evaluating: 'false | false'
+		equals: false.
+	self
+		evaluating: '((false) | (false))'
 		equals: false
 ]
 
@@ -503,6 +533,93 @@ RwCAQEvaluatorTest >> test_open_range_with_unset_version [
 		equals: false
 ]
 
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_operands_wrapped_in_parens [
+
+	self
+		evaluating: '(true) & (true)'
+		equals: true.
+	self
+		evaluating: '(false) & (true)'
+		equals: false.
+	self
+		evaluating: '(true) = (true)'
+		equals: true.
+	self
+		evaluating: '(true) = (false)'
+		equals: false.
+	self
+		evaluating: '(3.7.5) > (3.0)'
+		equals: true.
+	context
+		set: 'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: '(3.7.5) > (gemstone.version)'
+		equals: true
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_parens_allow_unlimited_nesting [
+
+	self
+		evaluating: '((((((true))))))'
+		equals: true
+]
+
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_parens_change_equality_ordering [
+
+	self
+		evaluating: '3.5 = 3.5 = true'
+		equals: true.
+	self
+		evaluating: '(3.5 = 3.5) = true'
+		equals: true.
+	self
+		evaluating: '3.5 = (3.5 = true)'
+		equals: false.
+]
+
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_parens_change_evaluating_of_equality_and_logic [
+	"Based on test_compare_and_equality_and_logic.
+
+	The test writer considered two possible forms for the parsed expression.
+
+	Form A: (x = y) | z
+	Form B: x = (y | z)
+
+	The comparision is treated as the x value, since it requires version
+	operands. Boolean operands will cause an error.
+
+	When evaluating x=false, y=false, and z=true,  Form A yields true.
+	Form B yields false.
+
+	This is why this particular expression was chosen."
+
+	self
+		evaluating: '(3.5 < 3.0 = false) | true'
+		equals: true.
+	self
+		evaluating: '3.5 < 3.0 = (false | true)'
+		equals: false
+]
+
+{ #category : 'running-composed' }
+RwCAQEvaluatorTest >> test_parens_change_logic_ordering [
+
+	self
+		evaluating: 'true | true & false'
+		equals: false.
+	self
+		evaluating: '(true | true) & false'
+		equals: false.
+	self
+		evaluating: 'true | (true & false)'
+		equals: true.
+]
+
 { #category : 'running-erroneous values' }
 RwCAQEvaluatorTest >> test_range_as_compare_operand [
 	"Ranges evaluate to boolean values. They are not comparable using greater than or less than operators."
@@ -559,6 +676,51 @@ RwCAQEvaluatorTest >> test_ranges_use_gemstone_version_from_context [
 ]
 
 { #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_ranges_with_parens [
+
+	self clearContext.
+	self
+		evaluating: 'gs3.7.[4-]'
+		equals: false.
+	self
+		evaluating: '(gs3.7.[4-])'
+		equals: false.
+	self
+		evaluating: 'gs3.7.[4-9]'
+		equals: false.
+	self
+		evaluating: '(gs3.7.[4-9])'
+		equals: false.
+	self
+		evaluating: 'gs3.7.x'
+		equals: false.
+	self
+		evaluating: '(gs3.7.x)'
+		equals: false.
+	context
+		set: 'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.7.[4-]'
+		equals: true.
+	self
+		evaluating: '(gs3.7.[4-])'
+		equals: true.
+	self
+		evaluating: 'gs3.7.[4-9]'
+		equals: true.
+	self
+		evaluating: '(gs3.7.[4-9])'
+		equals: true.
+	self
+		evaluating: 'gs3.7.x'
+		equals: true.
+	self
+		evaluating: '(gs3.7.x)'
+		equals: true.
+]
+
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_subversion_range [
 
 	context
@@ -606,13 +768,22 @@ RwCAQEvaluatorTest >> test_variable [
 	self
 		evaluating: 'gemstone'
 		equals: false.
+	self
+		evaluating: '(gemstone)'
+		equals: false.
 	context set: 'gemstone'.
 	self
 		evaluating: 'gemstone'
 		equals: true.
 	self
+		evaluating: '(gemstone)'
+		equals: true.
+	self
 		evaluating: 'pharo'
 		equals: false.
+	self
+		evaluating: '(pharo)'
+		equals: false
 ]
 
 { #category : 'running-simple' }

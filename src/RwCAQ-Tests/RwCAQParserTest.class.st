@@ -492,6 +492,16 @@ RwCAQParserTest >> test_parens_change_equality_associativity [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_parens_support_unlimited_nesting [
+
+	| variable |
+	variable := RwCAQVariable name: 'gemstone'.
+	self
+		parsing: '((((((gemstone))))))'
+		equals: variable parens parens parens parens parens parens
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_subversion_range [
 
 	| expected |
