@@ -22,14 +22,14 @@ RwCAQParser >> compareBlock [
 
 	^[:l :op :r | RwCAQCompare
 		left: l
-		op: op asSymbol
+		op: op
 		right: r]
 ]
 
 { #category : 'accessing' }
 RwCAQParser >> equalsBlock [
 
-	^[:l :op :r | RwCAQEquality left: l right: r]
+	^[:l :op :r | RwCAQEquality left: l op: op right: r]
 ]
 
 { #category : 'accessing' }
@@ -37,7 +37,7 @@ RwCAQParser >> logicBlock [
 
 	^[:l :op :r | RwCAQLogic
 		left: l
-		op: op asSymbol
+		op: op
 		right: r]
 ]
 

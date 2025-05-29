@@ -56,7 +56,7 @@ RwCAQGrammar >> compareOperator [
 	^(($> asParser, $= asParser not)
 	/ '>=' asParser
 	/ ($< asParser, $= asParser not)
-	/ '<=' asParser) flatten trim ==> [:token | token asSymbol]
+	/ '<=' asParser) flatten trim
 ]
 
 { #category : 'accessing' }
@@ -94,7 +94,7 @@ RwCAQGrammar >> logicBlock [
 RwCAQGrammar >> logicOperator [
 
 	^($| asParser
-	/ $& asParser) flatten trim ==> [:token | token asSymbol]
+	/ $& asParser) flatten trim
 ]
 
 { #category : 'simple' }

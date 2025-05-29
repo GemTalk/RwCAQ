@@ -87,5 +87,5 @@ RwCAQBinaryOperation >> right: astNode [
 RwCAQBinaryOperation >> selector [
 	"Return the appropriate selector to perform."
 
-	^op
+	^op asSymbol
 ]

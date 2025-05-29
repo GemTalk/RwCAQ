@@ -72,36 +72,37 @@ RwCAQParserTest >> test_compare [
 	| expected |
 	expected := RwCAQCompare
 		left: (RwCAQVariable name: 'gemstone.version')
-		op: #>
+		op:'>'
 		right: (RwCAQValue value: '42' asRwGemStoneVersionNumber).
 	self
 		parsing: 'gemstone.version > 42'
 		equals: expected.
-	expected op: #>=.
+	expected op: '>='.
 	self
 		parsing: 'gemstone.version >= 42'
 		equals: expected.
-	expected op: #<=.
+	expected op: '<='.
 	self
 		parsing: 'gemstone.version <= 42'
 		equals: expected.
-	expected op: #<.
+	expected op: '<'.
 	self
 		parsing: 'gemstone.version < 42'
 		equals: expected.
 ]
 
-{ #category : 'testing-composed' }
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_compare_and_equality [
 
 	| compare trueNode equality |
 	compare := RwCAQCompare
 		left: (RwCAQVariable name: 'gemstone.version')
-		op: #'>='
+		op: '>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	equality := RwCAQEquality
 		left: compare
+		op: '='
 		right: trueNode.
 	self
 		parsing: 'gemstone.version >= 3.0 = true'
@@ -109,6 +110,7 @@ RwCAQParserTest >> test_compare_and_equality [
 	
 	equality := RwCAQEquality
 		left: trueNode
+		op: '='
 		right: compare.
 	self
 		parsing: 'true = gemstone.version >= 3.0'
@@ -121,16 +123,17 @@ RwCAQParserTest >> test_compare_and_equality_and_logic [
 	| compare trueNode equality tests logic |
 	compare := RwCAQCompare
 		left: (RwCAQVariable name: 'gemstone.version')
-		op: #'>='
+		op: '>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	equality := RwCAQEquality
 		left: compare
+		op: '='
 		right: trueNode.
 	tests := RwCAQVariable name: 'tests'.
 	logic := RwCAQLogic
 		left: equality
-		op: #'|'
+		op: '|'
 		right: tests.
 	self
 		parsing: 'gemstone.version >= 3.0 = true | tests'
@@ -138,10 +141,11 @@ RwCAQParserTest >> test_compare_and_equality_and_logic [
 
 	equality := RwCAQEquality
 		left: trueNode
+		op: '='
 		right: compare.
 	logic := RwCAQLogic
 		left: tests
-		op: #'|'
+		op: '|'
 		right: equality.
 	self
 		parsing: 'tests | true = gemstone.version >= 3.0'
@@ -154,12 +158,12 @@ RwCAQParserTest >> test_compare_and_logic [
 	| compare trueNode logic |
 	compare := RwCAQCompare
 		left: (RwCAQVariable name: 'gemstone.version')
-		op: #'>='
+		op: '>='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	logic := RwCAQLogic
 		left: compare
-		op: #'|'
+		op: '|'
 		right: trueNode.
 	self
 		parsing: 'gemstone.version >= 3.0 | true'
@@ -167,7 +171,7 @@ RwCAQParserTest >> test_compare_and_logic [
 	
 	logic := RwCAQLogic
 		left: trueNode
-		op: #'|'
+		op: '|'
 		right: compare.
 	self
 		parsing: 'true | gemstone.version >= 3.0'
@@ -181,12 +185,14 @@ RwCAQParserTest >> test_equality [
 	| expected |
 	expected := RwCAQEquality
 		left: (RwCAQVariable name: 'gemstone.version')
+		op: '='
 		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
 	expected := RwCAQEquality
 		left: (RwCAQVariable name: 'tests')
+		op: '='
 		right: (RwCAQValue value: true).
 	self
 		parsing: 'tests = true'
@@ -199,11 +205,12 @@ RwCAQParserTest >> test_equality_and_logic [
 	| equality trueNode logic |
 	equality := RwCAQEquality
 		left: (RwCAQVariable name: 'gemstone.version')
+		op: '='
 		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
 	trueNode := RwCAQValue value: true.
 	logic := RwCAQLogic
 		left: equality
-		op: #'|'
+		op: '|'
 		right: trueNode.
 	self
 		parsing: 'gemstone.version = 3.0 | true'
@@ -211,7 +218,7 @@ RwCAQParserTest >> test_equality_and_logic [
 	
 	logic := RwCAQLogic
 		left: trueNode
-		op: #'|'
+		op: '|'
 		right: equality.
 	self
 		parsing: 'true | gemstone.version = 3.0'
@@ -224,9 +231,11 @@ RwCAQParserTest >> test_equality_is_left_associative [
 	| expected left |
 	left := RwCAQEquality
 		left: (RwCAQValue value: true)
+		op: '='
 		right: (RwCAQValue value: false).
 	expected := RwCAQEquality
 		left: left
+		op: '='
 		right: (RwCAQValue value: true).
 	self
 		parsing: 'true = false = true'
@@ -240,6 +249,7 @@ RwCAQParserTest >> test_equality_variable_spacing [
 	| expected |
 	expected := RwCAQEquality
 		left: (RwCAQVariable name: 'gemstone.version')
+		op: '='
 		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
 	self
 		parsing: 'gemstone.version          =42'
@@ -258,7 +268,7 @@ RwCAQParserTest >> test_logic [
 	trueNode := RwCAQValue value: true.
 	or := RwCAQLogic
 		left: gemstone
-		op: #|
+		op: '|'
 		right: trueNode.
 	self
 		parsing: 'gemstone | true'
@@ -266,7 +276,7 @@ RwCAQParserTest >> test_logic [
 
 	and := RwCAQLogic
 		left: gemstone
-		op: #&
+		op: '&'
 		right: trueNode.
 	self
 		parsing: 'gemstone & true'
