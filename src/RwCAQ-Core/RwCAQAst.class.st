@@ -4,6 +4,13 @@ Class {
 	#category : 'RwCAQ-Core'
 }
 
+{ #category : 'wrapping' }
+RwCAQAst >> parens [
+	"Wrap this AST Node with parenthesis."
+
+	^RwCAQParenthesis expression: self
+]
+
 { #category : 'printing' }
 RwCAQAst >> prettyPrintOn: aStream [
 

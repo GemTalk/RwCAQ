@@ -47,6 +47,18 @@ RwCAQParserTest >> test_boolean [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_boolean_with_parens [
+	"Parse false"
+
+	self
+		parsing: '(true)'
+		equals: (RwCAQValue value: true) parens.
+	self
+		parsing: '(false)'
+		equals: (RwCAQValue value: false) parens
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_closed_range [
 
 	| expected |
@@ -62,6 +74,27 @@ RwCAQParserTest >> test_closed_range [
 		max: '3.5.9' asRwGemStoneVersionNumber.
 	self
 		parsing: 'gs3.5.[7-8]'
+		equals: expected
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_closed_range_with_parens [
+
+	| range expected |
+	range := RwCAQClosedRange
+		min: '3.1' asRwGemStoneVersionNumber
+		max: '3.10' asRwGemStoneVersionNumber.
+	expected := range parens.
+	self
+		parsing: '(gs3.[1-9])'
+		equals: expected.
+
+	range := RwCAQClosedRange
+		min: '3.5.7' asRwGemStoneVersionNumber
+		max: '3.5.9' asRwGemStoneVersionNumber.
+	expected := range parens.
+	self
+		parsing: '(gs3.5.[7-8])'
 		equals: expected
 ]
 
@@ -152,6 +185,32 @@ RwCAQParserTest >> test_compare_and_equality_and_logic [
 		equals: logic
 ]
 
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_compare_and_equality_with_parens [
+
+	| compare trueNode equality |
+	compare := RwCAQCompare
+		left: (RwCAQVariable name: 'gemstone.version')
+		op: '>='
+		right: (RwCAQValue value: '3.0' asRwGemStoneVersionNumber).
+	trueNode := RwCAQValue value: true.
+	equality := RwCAQEquality
+		left: compare
+		op: '='
+		right: trueNode.
+	self
+		parsing: '(gemstone.version >= 3.0 = true)'
+		equals: equality parens.
+	
+	equality := RwCAQEquality
+		left: trueNode
+		op: '='
+		right: compare.
+	self
+		parsing: '(true = gemstone.version >= 3.0)'
+		equals: equality parens
+]
+
 { #category : 'testing-composed' }
 RwCAQParserTest >> test_compare_and_logic [
 
@@ -179,6 +238,32 @@ RwCAQParserTest >> test_compare_and_logic [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_compare_with_parens [
+	"Parse an equality statement"
+
+	| expected |
+	expected := RwCAQCompare
+		left: (RwCAQVariable name: 'gemstone.version')
+		op:'>'
+		right: (RwCAQValue value: '42' asRwGemStoneVersionNumber).
+	self
+		parsing: '(gemstone.version > 42)'
+		equals: expected parens.
+	expected op: '>='.
+	self
+		parsing: '(gemstone.version >= 42)'
+		equals: expected parens.
+	expected op: '<='.
+	self
+		parsing: '(gemstone.version <= 42)'
+		equals: expected parens.
+	expected op: '<'.
+	self
+		parsing: '(gemstone.version < 42)'
+		equals: expected parens.
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_equality [
 	"Parse an equality statement"
 
@@ -190,6 +275,7 @@ RwCAQParserTest >> test_equality [
 	self
 		parsing: 'gemstone.version = 42'
 		equals: expected.
+
 	expected := RwCAQEquality
 		left: (RwCAQVariable name: 'tests')
 		op: '='
@@ -260,6 +346,28 @@ RwCAQParserTest >> test_equality_variable_spacing [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_equality_with_parens [
+	"Parse an equality statement"
+
+	| expected |
+	expected := RwCAQEquality
+		left: (RwCAQVariable name: 'gemstone.version')
+		op: '='
+		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
+	self
+		parsing: '(gemstone.version = 42)'
+		equals: expected parens.
+
+	expected := RwCAQEquality
+		left: (RwCAQVariable name: 'tests')
+		op: '='
+		right: (RwCAQValue value: true).
+	self
+		parsing: '(tests = true)'
+		equals: expected parens
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_logic [
 	"Parse a logic statement"
 
@@ -284,6 +392,30 @@ RwCAQParserTest >> test_logic [
 ]
 
 { #category : 'testing-simple' }
+RwCAQParserTest >> test_logic_with_parens [
+	"Parse a logic statement"
+
+	| gemstone trueNode or and |
+	gemstone := RwCAQVariable name: 'gemstone'.
+	trueNode := RwCAQValue value: true.
+	or := RwCAQLogic
+		left: gemstone
+		op: '|'
+		right: trueNode.
+	self
+		parsing: '(gemstone | true)'
+		equals: or parens.
+
+	and := RwCAQLogic
+		left: gemstone parens
+		op: '&'
+		right: trueNode.
+	self
+		parsing: '(gemstone) & true'
+		equals: and.
+]
+
+{ #category : 'testing-simple' }
 RwCAQParserTest >> test_open_range [
 
 	| expected |
@@ -299,6 +431,63 @@ RwCAQParserTest >> test_open_range [
 		max: '3.6' asRwGemStoneVersionNumber.
 	self
 		parsing: 'gs3.5.[7-]'
+		equals: expected
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_open_range_with_parens [
+
+	| range parens |
+	range := RwCAQOpenRange
+		min: '3.1' asRwGemStoneVersionNumber
+		max: '4' asRwGemStoneVersionNumber.
+	parens := range parens.
+	self
+		parsing: '(gs3.[1-])'
+		equals: parens.
+
+	range := RwCAQOpenRange
+		min: '3.5.7' asRwGemStoneVersionNumber
+		max: '3.6' asRwGemStoneVersionNumber.
+	parens := range parens.
+	self
+		parsing: '(gs3.5.[7-])'
+		equals: parens
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_paren_spacing_is_unimportant [
+	"Parse an equality statement"
+
+	| equality parens |
+	equality := RwCAQEquality
+		left: (RwCAQVariable name: 'gemstone.version')
+		op: '='
+		right: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '42')).
+	parens := equality parens.
+	self
+		parsing: '(      gemstone.version          =42)'
+		equals: parens.
+	self
+		parsing: '(gemstone.version=         42                     )'
+		equals: parens
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_parens_change_equality_associativity [
+
+	| expected right parens |
+	right := RwCAQEquality
+		left: (RwCAQValue value: false)
+		op: '='
+		right: (RwCAQValue value: true).
+	parens := right parens.
+	expected := RwCAQEquality
+		left: (RwCAQValue value: true)
+		op: '='
+		right: parens.
+	self
+		parsing: 'true = (false = true)'
 		equals: expected
 ]
 
@@ -319,6 +508,27 @@ RwCAQParserTest >> test_subversion_range [
 	self
 		parsing: 'gs2.5.x'
 		equals: expected
+]
+
+{ #category : 'testing-simple' }
+RwCAQParserTest >> test_subversion_range_with_parens [
+
+	| range parens |
+	range := RwCAQSubversionRange
+		min: '3' asRwGemStoneVersionNumber
+		max: '4' asRwGemStoneVersionNumber.
+	parens := range parens.
+	self
+		parsing: '(gs3.x)'
+		equals: parens.
+
+	range := RwCAQSubversionRange
+		min: '2.5' asRwGemStoneVersionNumber
+		max: '2.6' asRwGemStoneVersionNumber.
+	parens := range parens.
+	self
+		parsing: '(gs2.5.x)'
+		equals: parens
 ]
 
 { #category : 'testing-trivial' }
@@ -363,25 +573,57 @@ RwCAQParserTest >> test_variable [
 ]
 
 { #category : 'testing-trivial' }
+RwCAQParserTest >> test_variable_with_parens [
+	"Parse solo identifiers"
+
+	| variable parens |
+	variable := RwCAQVariable name: 'gemstone'.
+	parens := variable parens.
+	self
+		parsing: '(gemstone)'
+		equals: parens.
+
+	variable := RwCAQVariable name: 'gemstone.version'.
+	parens := variable parens.
+	self
+		parsing: '(gemstone.version)'
+		equals: parens
+]
+
+{ #category : 'testing-trivial' }
 RwCAQParserTest >> test_version [
 	"GemStone/S version numbers"
 	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
 	These two methods should return the same answer."
 
-	| parser ast |
-	parser := self parser version end.
-	ast := parser parse: '3.7.14'.
 	self
-		assert: ast
+		parsing: '3.7.14'
 		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3.7.14')).
 
-	ast := parser parse: '3.7.0'.
 	self
-		assert: ast
+		parsing: '3.7'
 		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3.7')).
 
-	ast := parser parse: '3'.
 	self
-		assert: ast
+		parsing: '3'
 		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3')).
+]
+
+{ #category : 'testing-trivial' }
+RwCAQParserTest >> test_version_with_parens [
+	"GemStone/S version numbers"
+	"Note, #fromString: is implemented in Rowan. Parsing uses #fromComponents:.
+	These two methods should return the same answer."
+
+	self
+		parsing: '(3.7.14)'
+		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3.7.14')) parens.
+
+	self
+		parsing: '(3.7)'
+		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3.7')) parens.
+
+	self
+		parsing: '(3)'
+		equals: (RwCAQValue value: (RwGemStoneVersionNumber fromString: '3')) parens.
 ]

@@ -30,6 +30,13 @@ RwCAQParser >> equalsBlock [
 	^[:l :op :r | RwCAQEquality left: l op: op right: r]
 ]
 
+{ #category : 'compound' }
+RwCAQParser >> expressionInParens [
+
+	^super expressionInParens
+		==> [:expr | expr parens]
+]
+
 { #category : 'accessing' }
 RwCAQParser >> logicBlock [
 

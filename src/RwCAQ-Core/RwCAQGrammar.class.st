@@ -3,6 +3,7 @@ Class {
 	#superclass : 'PPCompositeParser',
 	#instVars : [
 		'expression',
+		'expressionInParens',
 		'primitive',
 		'boolean',
 		'falseLiteral',
@@ -77,12 +78,19 @@ RwCAQGrammar >> expression [
 
 	| ops |
 	ops := PPExpressionParser new.
-	ops term: primitive.
+	ops term: primitive / expressionInParens.
 	ops
 		group: [:g | g left: compareOperator do: self compareBlock];
 		group: [:g | g left: equalityOperator do: self equalsBlock];
 		group: [:g | g left: logicOperator do: self logicBlock].
 	^ops memoized
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> expressionInParens [
+
+	^$( asParser trim, expression, $) asParser trim
+		==> [:comps | comps second]
 ]
 
 { #category : 'simple' }
