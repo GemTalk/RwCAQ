@@ -1,7 +1,7 @@
-Extension { #name : 'RwCAQBinaryCompare' }
+Extension { #name : 'RwCAQCompare' }
 
 { #category : 'evaluating' }
-RwCAQBinaryCompare >> evaluateAndCheck: ast
+RwCAQCompare >> evaluateAndCheck: ast
 in: aContext
 ifSentinel: aBlock [
 
@@ -18,7 +18,7 @@ ifSentinel: aBlock [
 ]
 
 { #category : 'evaluating' }
-RwCAQBinaryCompare >> evaluateIn: aContext [
+RwCAQCompare >> evaluateIn: aContext [
 
 	| l r |
 	l := self
@@ -30,6 +30,6 @@ RwCAQBinaryCompare >> evaluateIn: aContext [
 		in: aContext
 		ifSentinel: [^false].
 	^l
-		perform: op
+		perform: self selector
 		with: r
 ]

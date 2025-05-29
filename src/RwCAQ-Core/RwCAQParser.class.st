@@ -20,7 +20,7 @@ RwCAQParser >> closedRange [
 { #category : 'accessing' }
 RwCAQParser >> compareBlock [
 
-	^[:l :op :r | RwCAQBinaryCompare
+	^[:l :op :r | RwCAQCompare
 		left: l
 		op: op asSymbol
 		right: r]
@@ -35,7 +35,7 @@ RwCAQParser >> equalsBlock [
 { #category : 'accessing' }
 RwCAQParser >> logicBlock [
 
-	^[:l :op :r | RwCAQBooleanLogic
+	^[:l :op :r | RwCAQLogic
 		left: l
 		op: op asSymbol
 		right: r]

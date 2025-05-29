@@ -1,5 +1,5 @@
 Class {
-	#name : 'RwCAQBinaryCompare',
+	#name : 'RwCAQBinaryOperation',
 	#superclass : 'RwCAQAst',
 	#instVars : [
 		'left',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-RwCAQBinaryCompare class >> left: lAst
+RwCAQBinaryOperation class >> left: lAst
 op: operation
 right: rAst [
 
@@ -21,55 +21,47 @@ right: rAst [
 		yourself
 ]
 
-{ #category : 'instance creation' }
-RwCAQBinaryCompare class >> methodSelector [
-	"method comment"
+{ #category : 'comparing' }
+RwCAQBinaryOperation >> = aBinaryOperation [
 
-	| temps |
-	^ self yourself
+	^self class == aBinaryOperation class
+		and: [left = aBinaryOperation left
+				and: [op = aBinaryOperation op
+						and: [right = aBinaryOperation right]]]
 ]
 
 { #category : 'comparing' }
-RwCAQBinaryCompare >> = aBinaryCompare [
-
-	^self class == aBinaryCompare class
-		and: [left = aBinaryCompare left
-				and: [op = aBinaryCompare op
-						and: [right = aBinaryCompare right]]]
-]
-
-{ #category : 'comparing' }
-RwCAQBinaryCompare >> hash [
+RwCAQBinaryOperation >> hash [
 
 	^(left hash bitXor: op hash) bitXor: right hash
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> left [
+RwCAQBinaryOperation >> left [
 
 	^left
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> left: astNode [
+RwCAQBinaryOperation >> left: astNode [
 
 	left := astNode
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> op [
+RwCAQBinaryOperation >> op [
 
 	^op
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> op: opSelector [
+RwCAQBinaryOperation >> op: opSelector [
 
 	op := opSelector
 ]
 
 { #category : 'printing' }
-RwCAQBinaryCompare >> prettyPrintOn: aStream [
+RwCAQBinaryOperation >> prettyPrintOn: aStream [
 
 	left prettyPrintOn: aStream.
 	aStream
@@ -80,19 +72,19 @@ RwCAQBinaryCompare >> prettyPrintOn: aStream [
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> right [
+RwCAQBinaryOperation >> right [
 
 	^right
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> right: astNode [
+RwCAQBinaryOperation >> right: astNode [
 
 	right := astNode
 ]
 
 { #category : 'accessing' }
-RwCAQBinaryCompare >> selector [
+RwCAQBinaryOperation >> selector [
 	"Return the appropriate selector to perform."
 
 	^op

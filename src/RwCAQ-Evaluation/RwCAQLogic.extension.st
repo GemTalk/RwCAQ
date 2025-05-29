@@ -1,7 +1,7 @@
-Extension { #name : 'RwCAQBooleanLogic' }
+Extension { #name : 'RwCAQLogic' }
 
 { #category : 'evaluating' }
-RwCAQBooleanLogic >> evaluateAndCheck: ast
+RwCAQLogic >> evaluateAndCheck: ast
 in: aContext
 ifSentinel: aBlock [
 
@@ -18,7 +18,7 @@ ifSentinel: aBlock [
 ]
 
 { #category : 'evaluating' }
-RwCAQBooleanLogic >> evaluateIn: aContext [
+RwCAQLogic >> evaluateIn: aContext [
 
 	| l r |
 	l := self
@@ -30,6 +30,6 @@ RwCAQBooleanLogic >> evaluateIn: aContext [
 		in: aContext
 		ifSentinel: [false].
 	^l
-		perform: op
+		perform: self selector
 		with: r
 ]

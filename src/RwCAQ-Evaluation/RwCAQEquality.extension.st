@@ -6,5 +6,7 @@ RwCAQEquality >> evaluateIn: aContext [
 	| l r |
 	l := left evaluateIn: aContext.
 	r := right evaluateIn: aContext.
-	^l = r
+	^l
+		perform: self selector
+		with: r
 ]
