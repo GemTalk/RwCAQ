@@ -11,6 +11,7 @@ Class {
 		'unsignedInteger',
 		'variable',
 		'compareOperator',
+		'equalityOperator',
 		'logicOperator',
 		'range',
 		'openRange',
@@ -30,10 +31,10 @@ RwCAQGrammar >> boolean [
 RwCAQGrammar >> closedRange [
 	"'gs3.[5-9]' is equivalent to '3.5 <= gemstone.version < 3.10'"
 
-	| prefix dottedComp rangeSpecifier versionBase |
+	| prefix subversion rangeSpecifier versionBase |
 	prefix := 'gs' asParser trimLeft.
-	dottedComp := ($. asParser, unsignedInteger) ==> [:comp | comp second].
-	versionBase := (prefix, unsignedInteger, dottedComp star, $. asParser) ==> [:t | { t second. }, t third ].
+	subversion := ($. asParser, unsignedInteger) ==> [:comp | comp second].
+	versionBase := (prefix, unsignedInteger, subversion star, $. asParser) ==> [:t | { t second }, t third ].
 	rangeSpecifier := ($[ asParser, unsignedInteger, $- asParser, unsignedInteger, $] asParser) ==> [:tokens | { tokens second. tokens at: 4. }].
 	^(versionBase, rangeSpecifier) trim
 		==> [:def | | minComps maxComps inclusiveMin exclusiveMax |
@@ -41,7 +42,7 @@ RwCAQGrammar >> closedRange [
 			inclusiveMin := RwGemStoneVersionNumber fromComponents: minComps.
 			maxComps := def first copy, { def last last + 1 }.
 			exclusiveMax := RwGemStoneVersionNumber fromComponents: maxComps.
-			{inclusiveMin. exclusiveMax.}]
+			{ inclusiveMin. exclusiveMax. }]
 ]
 
 { #category : 'accessing' }
@@ -53,10 +54,16 @@ RwCAQGrammar >> compareBlock [
 { #category : 'compound' }
 RwCAQGrammar >> compareOperator [
 
-	^(($> asParser, $= asParser not)
-	/ '>=' asParser
-	/ ($< asParser, $= asParser not)
-	/ '<=' asParser) flatten trim
+	^('>=' asParser
+	/ '<=' asParser
+	/ $> asParser
+	/ $< asParser) flatten trim
+]
+
+{ #category : 'compound' }
+RwCAQGrammar >> equalityOperator [
+
+	^$= asParser flatten trim
 ]
 
 { #category : 'accessing' }
@@ -73,7 +80,7 @@ RwCAQGrammar >> expression [
 	ops term: primitive.
 	ops
 		group: [:g | g left: compareOperator do: self compareBlock];
-		group: [:g | g left: $= asParser flatten trim do: self equalsBlock];
+		group: [:g | g left: equalityOperator do: self equalsBlock];
 		group: [:g | g left: logicOperator do: self logicBlock].
 	^ops memoized
 ]
@@ -101,10 +108,10 @@ RwCAQGrammar >> logicOperator [
 RwCAQGrammar >> openRange [
 	"'gs3.[5-]' is equivalent to '3.5 <= gemstone.version < 4'"
 
-	| prefix dottedComp rangeSpecifier versionBase |
+	| prefix subversion rangeSpecifier versionBase |
 	prefix := 'gs' asParser trimLeft.
-	dottedComp := ($. asParser, unsignedInteger) ==> [:comp | comp second].
-	versionBase := (prefix, unsignedInteger, dottedComp star, $. asParser) ==> [:t | { t second. }, t third ].
+	subversion := ($. asParser, unsignedInteger) ==> [:comp | comp second].
+	versionBase := (prefix, unsignedInteger, subversion star, $. asParser) ==> [:t | { t second. }, t third ].
 	rangeSpecifier := ($[ asParser, unsignedInteger, $- asParser, $] asParser) ==> [:tokens | tokens second].
 	^(versionBase, rangeSpecifier) trim
 		==> [:def | | minComps maxComps inclusiveMin exclusiveMax |
@@ -113,7 +120,7 @@ RwCAQGrammar >> openRange [
 			maxComps := def first copy.
 			maxComps at: maxComps size put: (maxComps last + 1).
 			exclusiveMax := RwGemStoneVersionNumber fromComponents: maxComps.
-			{inclusiveMin. exclusiveMax.}]
+			{ inclusiveMin. exclusiveMax.}]
 ]
 
 { #category : 'accessing' }
@@ -142,14 +149,14 @@ RwCAQGrammar >> subversionRange [
 	prefix := 'gs' asParser trimLeft.
 	subversion := ($. asParser, unsignedInteger) ==> [:comp | comp second].
 	rangeSpecifier := '.x' asParser.
-	versionBase := (prefix, unsignedInteger, subversion star, rangeSpecifier) ==> [:t | { t second. }, t third ].
+	versionBase := (prefix, unsignedInteger, subversion star, rangeSpecifier) ==> [:t | { t second }, t third ].
 	^versionBase trim
 		==> [:minComps | |  maxComps inclusiveMin exclusiveMax |
 			maxComps := minComps copy.
 			maxComps at: maxComps size put: (maxComps last + 1).
 			inclusiveMin := RwGemStoneVersionNumber fromComponents: minComps.
 			exclusiveMax := RwGemStoneVersionNumber fromComponents: maxComps.
-			{inclusiveMin. exclusiveMax.}]
+			{ inclusiveMin. exclusiveMax. }]
 ]
 
 { #category : 'simple' }
@@ -173,8 +180,8 @@ RwCAQGrammar >> variable [
 { #category : 'simple' }
 RwCAQGrammar >> version [
 
-	| start dottedComp |
+	| start subversion |
 	start := unsignedInteger.
-	dottedComp := ($. asParser, unsignedInteger) ==> [:comp | comp second].
-	^(start, dottedComp star) trim ==> [:comps | RwGemStoneVersionNumber fromComponents: ({ comps first} , comps second)]
+	subversion := ($. asParser, unsignedInteger) ==> [:comp | comp second].
+	^(start, subversion star) trim ==> [:comps | RwGemStoneVersionNumber fromComponents: ({ comps first } , comps second)]
 ]

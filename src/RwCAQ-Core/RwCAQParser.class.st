@@ -7,7 +7,8 @@ Class {
 { #category : 'accessing' }
 RwCAQParser >> boolean [
 
-	^super boolean ==> [:bool | RwCAQValue value: bool]
+	^super boolean
+		==> [:bool | RwCAQValue value: bool]
 ]
 
 { #category : 'accessing' }
@@ -20,10 +21,7 @@ RwCAQParser >> closedRange [
 { #category : 'accessing' }
 RwCAQParser >> compareBlock [
 
-	^[:l :op :r | RwCAQCompare
-		left: l
-		op: op
-		right: r]
+	^[:l :op :r | RwCAQCompare left: l op: op right: r]
 ]
 
 { #category : 'accessing' }
@@ -35,10 +33,7 @@ RwCAQParser >> equalsBlock [
 { #category : 'accessing' }
 RwCAQParser >> logicBlock [
 
-	^[:l :op :r | RwCAQLogic
-		left: l
-		op: op
-		right: r]
+	^[:l :op :r | RwCAQLogic left: l op: op right: r]
 ]
 
 { #category : 'accessing' }
