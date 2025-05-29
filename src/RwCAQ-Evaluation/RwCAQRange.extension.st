@@ -10,6 +10,6 @@ RwCAQRange >> evaluateIn: aContext [
 	| version |
 	version := aContext
 		resolve: 'gemstone.version'
-		ifUnset: [false]. "This should raise an exception. It is false to inline old broken behavior temporarily."
+		ifUnset: [^false].
 	^version >= min and: [version < max]
 ]

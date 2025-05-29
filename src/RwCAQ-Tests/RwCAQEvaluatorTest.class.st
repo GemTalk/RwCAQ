@@ -140,6 +140,21 @@ RwCAQEvaluatorTest >> test_closed_range [
 ]
 
 { #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_closed_range_with_unset_version [
+
+	context
+		set: 'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.[0-7]'
+		equals: true.
+	self clearContext.
+	self
+		evaluating: 'gs3.[0-7]'
+		equals: false
+]
+
+{ #category : 'running-simple' }
 RwCAQEvaluatorTest >> test_compare [
 
 	self
@@ -473,6 +488,21 @@ RwCAQEvaluatorTest >> test_open_range [
 		equals: false
 ]
 
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_open_range_with_unset_version [
+
+	context
+		set: 'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.[0-]'
+		equals: true.
+	self clearContext.
+	self
+		evaluating: 'gs3.[0-]'
+		equals: false
+]
+
 { #category : 'running-erroneous values' }
 RwCAQEvaluatorTest >> test_range_as_compare_operand [
 	"Ranges evaluate to boolean values. They are not comparable using greater than or less than operators."
@@ -551,6 +581,21 @@ RwCAQEvaluatorTest >> test_subversion_range [
 		equals: true.
 	self
 		evaluating: 'gs2.x'
+		equals: false
+]
+
+{ #category : 'running-simple' }
+RwCAQEvaluatorTest >> test_subversion_range_with_unset_version [
+
+	context
+		set: 'gemstone.version'
+		to: '3.7.4' asRwGemStoneVersionNumber.
+	self
+		evaluating: 'gs3.7.x'
+		equals: true.
+	self clearContext.
+	self
+		evaluating: 'gs3.7.x'
 		equals: false
 ]
 
