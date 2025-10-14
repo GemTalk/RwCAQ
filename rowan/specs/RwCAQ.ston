@@ -1,6 +1,7 @@
 RwLoadSpecificationV2 {
 	#projectName : 'RwCAQ',
 	#projectSpecFile : 'rowan/project.ston',
+	#gitUrl : 'git@github.com:GemTalk/RwCAQ.git',
 	#componentNames : [
 		'Core'
 	],
